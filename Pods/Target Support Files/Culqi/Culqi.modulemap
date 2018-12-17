@@ -1,0 +1,6 @@
+framework module Culqi {
+  umbrella header "Culqi-umbrella.h"
+
+  export *
+  module * { export * }
+}
