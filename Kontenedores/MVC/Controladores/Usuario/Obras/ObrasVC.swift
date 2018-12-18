@@ -125,23 +125,11 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
     
         //let portada = celda.contentView.subviews.first as! UIImageView
         //let titulo = celda.contentView.subviews[1] as! UILabel
-        
         celda.tituloObra.text = self.obras[indexPath.row].titulo
         celda.pintarPortada(obra: self.obras[indexPath.row])
         
         celda.establecerCintillo(obra: self.obras[indexPath.row])
         
-        let etiqueta = self.obras[indexPath.row].etiqueta == "primetime"
-        
-        celda.backgroundColor = (etiqueta) ? UIColor.white : #colorLiteral(red: 0.8294701938, green: 0.7245562089, blue: 0.8951218501, alpha: 1)
-        /*if  indexPath.row < obrasImg?.count ?? 0
-        {
-            portada.image = obrasImg?[indexPath.row]
-        }else
-        {
-            portada.image = #imageLiteral(resourceName: "portadaObraPlaceHolder")
-        }*/
-       
         return celda
     }
     
@@ -155,9 +143,16 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let anchura = UIScreen.main.bounds.width
-        //let altura = obrasCV.bounds.height
-        return CGSize(width: anchura / 2, height: 250)
+        //anchuraPortadaObra : CGFloat = 375 // -> 187.5 -> 100 %
+        //alturaPortadaObra : CGFloat = 600  // -> 300 -> 100 % 300 = 187.5 *  1.6
+        
+        let anchuraPantalla = UIScreen.main.bounds.width
+        
+        let anchuraCelda = (anchuraPantalla / 2)
+    
+        let alturaCelda = anchuraCelda * 1.6
+        
+        return CGSize(width: anchuraCelda, height: alturaCelda)
     }
 
     //MARK: Cambiar Obra

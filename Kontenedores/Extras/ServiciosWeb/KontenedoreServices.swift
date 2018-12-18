@@ -466,8 +466,8 @@ class KontenedoreServices: NSObject
     
     func obtenerVentasPorDia(tokenUsuario:String,bloqueCompletacion:@escaping(_ producto:Any?) -> Void)
     {
-        ///?date=toDay
-        let urlVentasDia = urlBase + "/productos/ventas"
+        //
+        let urlVentasDia = urlBase + "/productos/ventas/?date=toDay"
         
         let cabecera : HTTPHeaders = ["Authorization":"Bearer" + " " + tokenUsuario]
         

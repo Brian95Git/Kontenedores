@@ -15,7 +15,7 @@ class ObraCVCell: UICollectionViewCell
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var sombraPortadaObra: UIView!
     
-    var obra :Obra?
+    //var obra :Obra?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -31,47 +31,37 @@ class ObraCVCell: UICollectionViewCell
     
     func establecerCintillo(obra:Obra)
     {
-        //UIScreen.main.bounds.width
-        if self.obra == nil
-        {
-            self.obra = obra
-            
-            let esPrimeTime = (obra.etiqueta == "primetime")
-            
-            //let posX = (bounds.width / 2) * 0.6
-            //print(posX)
-            //let posY = (bounds.height / 2) * 0.2
-            
-            let dimensiones = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height * 0.1)
-           
-            let vistaCintillo = UIView(frame: dimensiones)
-            self.addSubview(vistaCintillo)
-            
-            vistaCintillo.backgroundColor = (esPrimeTime) ? UIColor.yellow : #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-            
-            vistaCintillo.transform = CGAffineTransform(rotationAngle: CGFloat(45.0.degreesToRadians))
-            
-            vistaCintillo.translatesAutoresizingMaskIntoConstraints = false
-            
-            let anchura = vistaCintillo.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0)
-            
-            let altura = vistaCintillo.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.1)
-            
-            let centerXVista = vistaCintillo.centerXAnchor.constraint(equalToSystemSpacingAfter: centerXAnchor, multiplier: 1)
-            
-            let centerYVista = vistaCintillo.centerYAnchor.constraint(equalToSystemSpacingBelow: centerYAnchor, multiplier: 0.1)
-            
-            NSLayoutConstraint.activate([centerXVista,centerYVista,anchura,altura])
-            
-            let labelCintillo = UILabel(frame: CGRect(x: 0, y: 0, width: vistaCintillo.bounds.width, height: vistaCintillo.bounds.height))
-            vistaCintillo.addSubview(labelCintillo)
-            
-            labelCintillo.font = UIFont(name: "System", size: 10)
-            
-            labelCintillo.textColor = UIColor.black
-            labelCintillo.text = (esPrimeTime) ? "Prime Time" : "Late Night"
-            labelCintillo.textAlignment = .center
-        }
+        let esPrimeTime = (obra.etiqueta == "primetime")
+        
+        let dimensiones = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height * 0.1)
+        
+        let vistaCintillo = UIView(frame: dimensiones)
+        self.addSubview(vistaCintillo)
+        
+        vistaCintillo.backgroundColor = (esPrimeTime) ? UIColor.yellow : #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
+        
+        vistaCintillo.transform = CGAffineTransform(rotationAngle: CGFloat(45.0.degreesToRadians))
+        
+        vistaCintillo.translatesAutoresizingMaskIntoConstraints = false
+        
+        let anchura = vistaCintillo.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0)
+        
+        let altura = vistaCintillo.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.1)
+        
+        let centerXVista = NSLayoutConstraint(item: vistaCintillo, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.6, constant: 0)
+        
+        let topVista = NSLayoutConstraint(item: vistaCintillo, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 0.275, constant: 0)
+        
+        NSLayoutConstraint.activate([centerXVista,topVista,anchura,altura])
+        
+        let labelCintillo = UILabel(frame: CGRect(x: 0, y: 0, width: vistaCintillo.bounds.width, height: vistaCintillo.bounds.height))
+        vistaCintillo.addSubview(labelCintillo)
+        
+        labelCintillo.font = UIFont(name: "System", size: 10)
+        
+        labelCintillo.textColor = UIColor.black
+        labelCintillo.text = (esPrimeTime) ? "Prime Time" : "Late Night"
+        labelCintillo.textAlignment = .center
     }
     
     override func prepareForReuse() {

@@ -37,27 +37,7 @@ class ListaPedidosVC: UIViewController {
         sender.isUserInteractionEnabled = false
         self.activityAceptar.startAnimating()
         
-        guard let idCompra = AppDelegate.listaPedido.first as? Int else {return}
-        
-        AppDelegate.pushConfirmacionPedido = false
-        
-        let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
-    
-        KontenedoreServices.instancia.actualizarPedido(tokenUsuario: tokenUsuario!, idCompra: idCompra, estatus: true) { (respuesta) in
-            
-            if let exito = respuesta as? Double
-            {
-                self.activityAceptar.stopAnimating()
-                
-                AppDelegate.instanciaCompartida.usuario?.saldo = exito.valorNumerico2Decimales()
-                
-                self.dismiss(animated: true, completion: nil)
-            }else
-            {
-                self.activityAceptar.stopAnimating()
-                self.dismiss(animated: true, completion: nil)
-            }
-        }
+        self.definirEstadoPedido(estatus: true, activity: self.activityAceptar)
     }
     
     @IBAction func cancelarPedido(_ sender: UIButton)
@@ -65,28 +45,35 @@ class ListaPedidosVC: UIViewController {
         sender.isUserInteractionEnabled = false
         self.activityCancelar.startAnimating()
         
+        self.definirEstadoPedido(estatus: false, activity: self.activityCancelar)
+        
+    }
+    
+    func definirEstadoPedido(estatus:Bool,activity:UIActivityIndicatorView)
+    {
         guard let idCompra = AppDelegate.listaPedido.first as? Int else {return}
         
         AppDelegate.pushConfirmacionPedido = false
         
         let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
-
-        KontenedoreServices.instancia.actualizarPedido(tokenUsuario: tokenUsuario!, idCompra: idCompra, estatus: false) { (respuesta) in
+        
+        KontenedoreServices.instancia.actualizarPedido(tokenUsuario: tokenUsuario!, idCompra: idCompra, estatus: estatus) { (respuesta) in
             
             if let exito = respuesta as? Double
             {
-                self.activityCancelar.stopAnimating()
-                
+                activity.stopAnimating()
+            
                 AppDelegate.instanciaCompartida.usuario?.saldo = exito.valorNumerico2Decimales()
                 
                 self.dismiss(animated: true, completion: nil)
             }else
             {
-                self.activityCancelar.stopAnimating()
+                activity.stopAnimating()
                 self.dismiss(animated: true, completion: nil)
             }
         }
     }
+    
     
     /*
     // MARK: - Navigation
