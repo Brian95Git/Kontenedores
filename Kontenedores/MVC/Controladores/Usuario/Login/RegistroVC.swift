@@ -12,6 +12,7 @@ class RegistroVC: UIViewController {
 
     @IBOutlet weak var nombreTxt: UITextField!
     @IBOutlet weak var apellidoTxt: UITextField!
+    @IBOutlet weak var dniTxt: UITextField!
     @IBOutlet weak var emailTxt: UITextField!
     @IBOutlet weak var celularTxt: UITextField!
     @IBOutlet weak var contrasenaTxt: UITextField!
@@ -28,10 +29,13 @@ class RegistroVC: UIViewController {
         
         nombreTxt.delegate = self
         apellidoTxt.delegate = self
+        dniTxt.delegate = self
         emailTxt.delegate = self
         celularTxt.delegate = self
         contrasenaTxt.delegate = self
         repetirContrasenaTxt.delegate = self
+        
+        nombreTxt.becomeFirstResponder()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle
@@ -46,10 +50,11 @@ class RegistroVC: UIViewController {
     
     func registarUsuario()
     {
-        guard let nombre = nombreTxt.text,!nombre.isEmpty,let apellido = apellidoTxt.text,!apellido.isEmpty,let email = emailTxt.text,!email.isEmpty,let celular = celularTxt.text,!celular.isEmpty,celularTxt.text?.count ?? 0 >= 9,let contrasena = contrasenaTxt.text,!contrasena.isEmpty,let repetirContrasena = repetirContrasenaTxt.text,!repetirContrasena.isEmpty , contrasena == repetirContrasena
+        guard let nombre = nombreTxt.text,!nombre.isEmpty,let apellido = apellidoTxt.text,!apellido.isEmpty,let dni = dniTxt.text,!dni.isEmpty,dni.count == 8,let email = emailTxt.text,!email.isEmpty,let celular = celularTxt.text,!celular.isEmpty,celular.count >= 9,let contrasena = contrasenaTxt.text,!contrasena.isEmpty,let repetirContrasena = repetirContrasenaTxt.text,!repetirContrasena.isEmpty , contrasena == repetirContrasena
             else {
                 
-                let alertController = UIAlertController(title: "Kontenedores", message: "Verifica que todos los campos sean válidos.Puede que no hayas ingresado todo tu número celular o que las contraseñas no sean iguales.", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "Kontenedores", message: "Verifica que todos los campos sean válidos.Puede que no hayas ingresado todo tu número celular,que el dni no esté completo u sea correcto o que las contraseñas no sean iguales.", preferredStyle: .alert)
+                
                 let ok = UIAlertAction(title: "Ok", style: .default, handler: nil)
                 alertController.addAction(ok)
                 
@@ -62,7 +67,7 @@ class RegistroVC: UIViewController {
         self.view.isUserInteractionEnabled = false
         activityIndicator.startAnimating()
         
-        let usuario = Usuario(nombre: nombre, apellido: apellido, celular: celular, email: email, contrasena: contrasena, repetirContrasena: repetirContrasena)
+        let usuario = Usuario(nombre: nombre, apellido: apellido, dni: dni,celular: celular, email: email, contrasena: contrasena, repetirContrasena: repetirContrasena)
         
         KontenedoreServices.instancia.registrarUsuario(usuario: usuario) { (respuesta) in
             
@@ -119,32 +124,34 @@ class RegistroVC: UIViewController {
 
 extension RegistroVC : UITextFieldDelegate
 {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        if textField == celularTxt {
-            
-            if string == "" && textField.text?.count == 9
-            {
-                textField.text?.removeLast()
-            }
-            
-            return (textField.text?.count)! < 9
-        }else
-        {
-            if string == "" && textField.text?.count == 60
-            {
-                textField.text?.removeLast()
-            }
-            
-            return (textField.text?.count)! < 60
-        }
-    }
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//
+//        if textField == celularTxt {
+//
+//            if string == "" && textField.text?.count == 9
+//            {
+//                textField.text?.removeLast()
+//            }
+//            
+//            return (textField.text?.count)! < 9
+//        }else
+//        {
+//            if string == "" && textField.text?.count == 60
+//            {
+//                textField.text?.removeLast()
+//            }
+//
+//            return (textField.text?.count)! < 60
+//        }
+//    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         if textField == nombreTxt {return apellidoTxt.becomeFirstResponder()}
         
-        if textField == apellidoTxt {return celularTxt.becomeFirstResponder()}
+        if textField == apellidoTxt {return dniTxt.becomeFirstResponder()}
+        
+        if textField == dniTxt {return celularTxt.becomeFirstResponder()}
         
         if textField == celularTxt {
             centroYStackRegistro.constant = -80
@@ -169,7 +176,7 @@ extension RegistroVC : UITextFieldDelegate
         {centroYStackRegistro.constant = -80}
         
         if textField == repetirContrasenaTxt || textField == contrasenaTxt
-        {centroYStackRegistro.constant = -120}
+        {centroYStackRegistro.constant = -140}
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

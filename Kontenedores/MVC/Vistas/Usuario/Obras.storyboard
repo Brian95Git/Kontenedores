@@ -1715,6 +1715,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="JdH-hZ-dFq"/>
                     </view>
+                    <size key="freeformSize" width="414" height="736"/>
                     <connections>
                         <outlet property="activityObras" destination="jnn-C0-N9p" id="4E6-0Z-ysB"/>
                         <outlet property="btnSaldo" destination="jo8-nQ-mqx" id="qdZ-F5-B6D"/>

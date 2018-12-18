@@ -14,6 +14,7 @@ class Usuario: NSObject,NSCoding {
     var token :String = ""
     var nombre: String = ""
     var apellido :String = ""
+    var dni :String = ""
     var email : String = ""
     var celular : String = ""
     var contrasena : String = ""
@@ -25,10 +26,11 @@ class Usuario: NSObject,NSCoding {
     override init() {
         super.init()
     }
-    init(nombre:String,apellido:String,celular:String,email:String,contrasena:String,repetirContrasena:String) {
+    init(nombre:String,apellido:String,dni:String,celular:String,email:String,contrasena:String,repetirContrasena:String) {
         
         self.nombre = nombre
         self.apellido = apellido
+        self.dni = dni
         self.celular = celular
         self.email = email
         self.contrasena = contrasena

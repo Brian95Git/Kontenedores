@@ -131,9 +131,6 @@
                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRW-BX-2jD">
                                         <rect key="frame" x="47" y="216.5" width="281" height="47"/>
                                         <color key="backgroundColor" red="0.5450980392" green="0.0039215686269999999" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="bRW-BX-2jD" secondAttribute="height" multiplier="6:1" id="vRg-eP-7rb"/>
-                                        </constraints>
                                         <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="20"/>
                                         <state key="normal" title="Iniciar Sesión">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -159,7 +156,7 @@
                                             <action selector="olvideMiContraseña:" destination="6rh-Sm-jjK" eventType="touchUpInside" id="x2J-WV-nvr"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¿No tienes una cuenta?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7io-CE-CXb">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="¿No tienes una cuenta?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7io-CE-CXb">
                                         <rect key="frame" x="47" y="355" width="170" height="22"/>
                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
                                         <nil key="textColor"/>
@@ -184,6 +181,7 @@
                                     <constraint firstItem="7io-CE-CXb" firstAttribute="top" secondItem="kVA-b0-haN" secondAttribute="bottom" constant="30" id="fUh-xl-ADg"/>
                                     <constraint firstItem="7io-CE-CXb" firstAttribute="leading" secondItem="bRW-BX-2jD" secondAttribute="leading" id="fwK-47-CIV"/>
                                     <constraint firstItem="0lk-B3-yoK" firstAttribute="centerY" secondItem="bRW-BX-2jD" secondAttribute="centerY" multiplier="1.002" id="n2z-JF-93V"/>
+                                    <constraint firstItem="bRW-BX-2jD" firstAttribute="top" secondItem="9vI-Ed-A9s" secondAttribute="bottom" constant="23" id="nEh-S2-ahX"/>
                                     <constraint firstAttribute="bottom" secondItem="7io-CE-CXb" secondAttribute="bottom" constant="23" id="rkB-3S-gij"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -248,10 +246,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JLf-Q4-FYU" userLabel="ViewRegistro">
-                                <rect key="frame" x="0.0" y="156" width="375" height="526"/>
+                                <rect key="frame" x="0.0" y="136" width="375" height="546"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="g83-qt-gm2" userLabel="StackCamposRegistro">
-                                        <rect key="frame" x="12" y="48" width="363" height="377"/>
+                                        <rect key="frame" x="12" y="25" width="363" height="441.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="2FI-jV-qBX" userLabel="StackNombre">
                                                 <rect key="frame" x="0.0" y="0.0" width="363" height="54.5"/>
@@ -309,8 +307,36 @@
                                                     <constraint firstAttribute="trailing" secondItem="T9m-8s-D2P" secondAttribute="trailing" id="VRF-E3-TJj"/>
                                                 </constraints>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="c7e-4C-PpJ" userLabel="StackCelular">
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="Msu-yT-NHy" userLabel="StackDNI">
                                                 <rect key="frame" x="0.0" y="129" width="363" height="54.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DNI" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAB-0F-39w" userLabel="DNI">
+                                                        <rect key="frame" x="0.0" y="0.0" width="28.5" height="20.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hNY-t3-Hoo">
+                                                        <rect key="frame" x="0.0" y="26.5" width="363" height="20"/>
+                                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                        <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="continue"/>
+                                                    </textField>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M7M-mt-iDL" userLabel="subrayadoApellido">
+                                                        <rect key="frame" x="0.0" y="52.5" width="363" height="2"/>
+                                                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="2" id="pZw-jF-p7u"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="M7M-mt-iDL" secondAttribute="trailing" id="Rq1-33-faJ"/>
+                                                    <constraint firstAttribute="trailing" secondItem="hNY-t3-Hoo" secondAttribute="trailing" id="ajR-YT-ae9"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="c7e-4C-PpJ" userLabel="StackCelular">
+                                                <rect key="frame" x="0.0" y="193.5" width="363" height="54.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Celular" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vem-Y0-5ca">
                                                         <rect key="frame" x="0.0" y="0.0" width="53.5" height="20.5"/>
@@ -338,7 +364,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="uxS-Mh-gfv" userLabel="StackEmail">
-                                                <rect key="frame" x="0.0" y="193.5" width="363" height="54.5"/>
+                                                <rect key="frame" x="0.0" y="258" width="363" height="54.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aD5-Pt-8ah">
                                                         <rect key="frame" x="0.0" y="0.0" width="41" height="20.5"/>
@@ -366,7 +392,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="UgG-wP-3vL" userLabel="StackContraseña">
-                                                <rect key="frame" x="0.0" y="258" width="363" height="54.5"/>
+                                                <rect key="frame" x="0.0" y="322.5" width="363" height="54.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contraseña" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oah-lO-qwY">
                                                         <rect key="frame" x="0.0" y="0.0" width="88.5" height="20.5"/>
@@ -394,7 +420,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="VDk-cG-i5b" userLabel="StackRepetirContraseña">
-                                                <rect key="frame" x="0.0" y="322.5" width="363" height="54.5"/>
+                                                <rect key="frame" x="0.0" y="387" width="363" height="54.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Repetir Contraseña" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LTQ-C3-Uwr" userLabel="Repetir Contraseña">
                                                         <rect key="frame" x="0.0" y="0.0" width="147.5" height="20.5"/>
@@ -426,13 +452,14 @@
                                             <constraint firstAttribute="trailing" secondItem="2FI-jV-qBX" secondAttribute="trailing" id="A7c-99-Mkh"/>
                                             <constraint firstAttribute="trailing" secondItem="VDk-cG-i5b" secondAttribute="trailing" id="K2o-de-ofm"/>
                                             <constraint firstAttribute="trailing" secondItem="NBC-MS-f31" secondAttribute="trailing" id="M6K-Dd-ooC"/>
+                                            <constraint firstAttribute="trailing" secondItem="Msu-yT-NHy" secondAttribute="trailing" id="ieB-aH-Cxn"/>
                                             <constraint firstAttribute="trailing" secondItem="UgG-wP-3vL" secondAttribute="trailing" id="jzc-wx-5rs"/>
                                             <constraint firstAttribute="trailing" secondItem="uxS-Mh-gfv" secondAttribute="trailing" id="pFb-M8-Iwi"/>
                                             <constraint firstAttribute="trailing" secondItem="c7e-4C-PpJ" secondAttribute="trailing" id="vAj-Q5-FnO"/>
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e0K-TG-j4D">
-                                        <rect key="frame" x="87.5" y="442.5" width="200" height="36"/>
+                                        <rect key="frame" x="87.5" y="476.5" width="200" height="36"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="I7b-2E-des"/>
                                         </constraints>
@@ -456,12 +483,11 @@
                                         </connections>
                                     </button>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="zwi-Kc-dLs">
-                                        <rect key="frame" x="243" y="450.5" width="20" height="20"/>
+                                        <rect key="frame" x="243" y="484.5" width="20" height="20"/>
                                     </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="e0K-TG-j4D" firstAttribute="centerY" secondItem="JLf-Q4-FYU" secondAttribute="centerY" multiplier="1.75" id="4cO-vJ-8pS"/>
                                     <constraint firstItem="g83-qt-gm2" firstAttribute="centerY" secondItem="JLf-Q4-FYU" secondAttribute="centerY" multiplier="0.9" id="DR1-0S-QT6"/>
                                     <constraint firstAttribute="trailing" secondItem="g83-qt-gm2" secondAttribute="trailing" id="EzX-cC-tJP"/>
                                     <constraint firstItem="zwi-Kc-dLs" firstAttribute="centerX" secondItem="JLf-Q4-FYU" secondAttribute="centerX" multiplier="1.35" id="LkW-6f-G9I"/>
@@ -469,6 +495,7 @@
                                     <constraint firstItem="e0K-TG-j4D" firstAttribute="width" secondItem="VDk-cG-i5b" secondAttribute="width" multiplier="0.55" id="jRx-YJ-TYi"/>
                                     <constraint firstItem="g83-qt-gm2" firstAttribute="leading" secondItem="JLf-Q4-FYU" secondAttribute="leading" constant="12" id="pgx-yY-6Ga"/>
                                     <constraint firstItem="zwi-Kc-dLs" firstAttribute="centerY" secondItem="e0K-TG-j4D" secondAttribute="centerY" id="s6Q-yN-8Hh"/>
+                                    <constraint firstItem="e0K-TG-j4D" firstAttribute="top" secondItem="g83-qt-gm2" secondAttribute="bottom" constant="10" id="xdb-MU-SaE"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -501,7 +528,7 @@
                             <constraint firstItem="9xy-BP-JQg" firstAttribute="leading" secondItem="Mdi-tp-YuU" secondAttribute="leading" constant="16" id="WdZ-9l-oIc"/>
                             <constraint firstItem="5as-YJ-63a" firstAttribute="leading" secondItem="cEx-Xe-bp2" secondAttribute="leading" id="dDt-Be-xKL"/>
                             <constraint firstItem="9xy-BP-JQg" firstAttribute="top" secondItem="cEx-Xe-bp2" secondAttribute="top" constant="60" id="duc-5R-tcP"/>
-                            <constraint firstItem="JLf-Q4-FYU" firstAttribute="top" secondItem="9xy-BP-JQg" secondAttribute="bottom" constant="40" id="h0j-cD-aiT"/>
+                            <constraint firstItem="JLf-Q4-FYU" firstAttribute="top" secondItem="9xy-BP-JQg" secondAttribute="bottom" constant="20" id="h0j-cD-aiT"/>
                             <constraint firstItem="JLf-Q4-FYU" firstAttribute="trailing" secondItem="cEx-Xe-bp2" secondAttribute="trailing" id="nou-Dq-Byc"/>
                             <constraint firstItem="JLf-Q4-FYU" firstAttribute="leading" secondItem="cEx-Xe-bp2" secondAttribute="leading" id="tRa-7F-YdK"/>
                         </constraints>
@@ -518,6 +545,7 @@
                         <outlet property="celularTxt" destination="1sP-hv-Hwp" id="JyE-Ft-BUz"/>
                         <outlet property="centroYStackRegistro" destination="DR1-0S-QT6" id="2XW-B1-PwU"/>
                         <outlet property="contrasenaTxt" destination="Bdn-mh-Vuo" id="be3-4T-IHO"/>
+                        <outlet property="dniTxt" destination="hNY-t3-Hoo" id="nwP-TN-gbc"/>
                         <outlet property="emailTxt" destination="0sY-Yu-iFI" id="Le4-0q-wMy"/>
                         <outlet property="nombreTxt" destination="b5T-2B-SdM" id="IUv-ng-vqS"/>
                         <outlet property="repetirContrasenaTxt" destination="v6L-8D-Yxr" id="Xy0-dM-R6R"/>

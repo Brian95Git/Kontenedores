@@ -129,6 +129,8 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
         celda.tituloObra.text = self.obras[indexPath.row].titulo
         celda.pintarPortada(obra: self.obras[indexPath.row])
         
+        celda.establecerCintillo(obra: self.obras[indexPath.row])
+        
         let etiqueta = self.obras[indexPath.row].etiqueta == "primetime"
         
         celda.backgroundColor = (etiqueta) ? UIColor.white : #colorLiteral(red: 0.8294701938, green: 0.7245562089, blue: 0.8951218501, alpha: 1)
@@ -157,7 +159,6 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
         //let altura = obrasCV.bounds.height
         return CGSize(width: anchura / 2, height: 250)
     }
-    
 
     //MARK: Cambiar Obra
     

@@ -21,7 +21,7 @@ class KontenedoreServices: NSObject
     {
         let urlRegistro = urlBase + "/signup"
         
-        let parametros : [String :String] = ["name":usuario.nombre + " " +  usuario.apellido,"phone":usuario.celular,"email":usuario.email,"password":usuario.contrasena,"password_confirmation":usuario.repetirContrasena]
+        let parametros : [String :String] = ["name":usuario.nombre + " " +  usuario.apellido,"dni":usuario.dni,"phone":usuario.celular,"email":usuario.email,"password":usuario.contrasena,"password_confirmation":usuario.repetirContrasena]
     
         Alamofire.request(urlRegistro, method: .post, parameters: parametros, encoding: URLEncoding.default, headers: [:]).responseJSON { (respuesta) in
             
