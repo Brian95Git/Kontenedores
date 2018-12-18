@@ -34,11 +34,6 @@
 		8435A87521A765CB00E19D0A /* Obra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8435A87421A765CB00E19D0A /* Obra.swift */; };
 		8435A87921A7668800E19D0A /* CategoriaProducto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8435A87821A7668800E19D0A /* CategoriaProducto.swift */; };
 		84462A6021A467EA002D55C8 /* Proveedor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84462A5F21A467EA002D55C8 /* Proveedor.storyboard */; };
-		84462A6821A47FF9002D55C8 /* ProductoTBCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84462A6321A47FF8002D55C8 /* ProductoTBCell.swift */; };
-		84462A6921A47FF9002D55C8 /* ProductoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84462A6421A47FF8002D55C8 /* ProductoVC.swift */; };
-		84462A6A21A47FF9002D55C8 /* CategoriasVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84462A6521A47FF9002D55C8 /* CategoriasVC.swift */; };
-		84462A6B21A47FF9002D55C8 /* QRScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84462A6621A47FF9002D55C8 /* QRScanVC.swift */; };
-		84462A6C21A47FF9002D55C8 /* PedidosVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84462A6721A47FF9002D55C8 /* PedidosVC.swift */; };
 		845CCDB821BC53F40066AE27 /* Recarga.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845CCDB721BC53F40066AE27 /* Recarga.swift */; };
 		846DE64721BF4B3C003F1529 /* TicketVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DE64621BF4B3C003F1529 /* TicketVC.swift */; };
 		8485EC0021BB14E7006CEC74 /* Entrada.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8485EBFF21BB14E7006CEC74 /* Entrada.swift */; };
@@ -50,6 +45,11 @@
 		84D2AAA621A88E6400228C4E /* HistorialPedidosVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D2AAA521A88E6400228C4E /* HistorialPedidosVC.swift */; };
 		84D2AAA821A88E8700228C4E /* PerfilProveedorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D2AAA721A88E8700228C4E /* PerfilProveedorVC.swift */; };
 		84D5BADB21C84C2200236B34 /* Venta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5BADA21C84C2100236B34 /* Venta.swift */; };
+		84D5BAE121C873F600236B34 /* QRScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5BADC21C873F500236B34 /* QRScanVC.swift */; };
+		84D5BAE221C873F600236B34 /* ProductoTBCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5BADD21C873F500236B34 /* ProductoTBCell.swift */; };
+		84D5BAE321C873F600236B34 /* PedidosVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5BADE21C873F600236B34 /* PedidosVC.swift */; };
+		84D5BAE421C873F600236B34 /* CategoriasVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5BADF21C873F600236B34 /* CategoriasVC.swift */; };
+		84D5BAE521C873F600236B34 /* ProductoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5BAE021C873F600236B34 /* ProductoVC.swift */; };
 		84D7E09521C1E3C100F7A81E /* ListaPedidosVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D7E09421C1E3C100F7A81E /* ListaPedidosVC.swift */; };
 		84EF974A21BF19AF0088AC05 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84EF974921BF19AC0088AC05 /* GoogleService-Info.plist */; };
 		84EF974E21BF45440088AC05 /* EntradaScan.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84EF974D21BF45440088AC05 /* EntradaScan.storyboard */; };
@@ -128,11 +128,6 @@
 		8435A87421A765CB00E19D0A /* Obra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Obra.swift; sourceTree = "<group>"; };
 		8435A87821A7668800E19D0A /* CategoriaProducto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriaProducto.swift; sourceTree = "<group>"; };
 		84462A5F21A467EA002D55C8 /* Proveedor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Proveedor.storyboard; sourceTree = "<group>"; };
-		84462A6321A47FF8002D55C8 /* ProductoTBCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProductoTBCell.swift; path = ../../../../../../PushNotificacionTest/KontenedoresTest/MVC/Controladores/Proveedor/ProductoTBCell.swift; sourceTree = "<group>"; };
-		84462A6421A47FF8002D55C8 /* ProductoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProductoVC.swift; path = ../../../../../../PushNotificacionTest/KontenedoresTest/MVC/Controladores/Proveedor/ProductoVC.swift; sourceTree = "<group>"; };
-		84462A6521A47FF9002D55C8 /* CategoriasVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoriasVC.swift; path = ../../../../../../PushNotificacionTest/KontenedoresTest/MVC/Controladores/Proveedor/CategoriasVC.swift; sourceTree = "<group>"; };
-		84462A6621A47FF9002D55C8 /* QRScanVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QRScanVC.swift; path = ../../../../../../PushNotificacionTest/KontenedoresTest/MVC/Controladores/Proveedor/QRScanVC.swift; sourceTree = "<group>"; };
-		84462A6721A47FF9002D55C8 /* PedidosVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PedidosVC.swift; path = ../../../../../../PushNotificacionTest/KontenedoresTest/MVC/Controladores/Proveedor/PedidosVC.swift; sourceTree = "<group>"; };
 		845CCDB721BC53F40066AE27 /* Recarga.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recarga.swift; sourceTree = "<group>"; };
 		846DE64621BF4B3C003F1529 /* TicketVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketVC.swift; sourceTree = "<group>"; };
 		8485EBFF21BB14E7006CEC74 /* Entrada.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entrada.swift; sourceTree = "<group>"; };
@@ -145,6 +140,11 @@
 		84D2AAA521A88E6400228C4E /* HistorialPedidosVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorialPedidosVC.swift; sourceTree = "<group>"; };
 		84D2AAA721A88E8700228C4E /* PerfilProveedorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilProveedorVC.swift; sourceTree = "<group>"; };
 		84D5BADA21C84C2100236B34 /* Venta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Venta.swift; sourceTree = "<group>"; };
+		84D5BADC21C873F500236B34 /* QRScanVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRScanVC.swift; sourceTree = "<group>"; };
+		84D5BADD21C873F500236B34 /* ProductoTBCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductoTBCell.swift; sourceTree = "<group>"; };
+		84D5BADE21C873F600236B34 /* PedidosVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PedidosVC.swift; sourceTree = "<group>"; };
+		84D5BADF21C873F600236B34 /* CategoriasVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriasVC.swift; sourceTree = "<group>"; };
+		84D5BAE021C873F600236B34 /* ProductoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductoVC.swift; sourceTree = "<group>"; };
 		84D7E09421C1E3C100F7A81E /* ListaPedidosVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaPedidosVC.swift; sourceTree = "<group>"; };
 		84EF974921BF19AC0088AC05 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84EF974B21BF21280088AC05 /* Kontenedores.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Kontenedores.entitlements; sourceTree = "<group>"; };
@@ -249,6 +249,7 @@
 		8417BDA521A30DCF00F33866 /* Proveedor */ = {
 			isa = PBXGroup;
 			children = (
+				84462A5F21A467EA002D55C8 /* Proveedor.storyboard */,
 			);
 			path = Proveedor;
 			sourceTree = "<group>";
@@ -268,7 +269,6 @@
 		8417BDAB21A311C900F33866 /* Controladores */ = {
 			isa = PBXGroup;
 			children = (
-				84462A5F21A467EA002D55C8 /* Proveedor.storyboard */,
 				84EF974F21BF46020088AC05 /* ObraScan */,
 				8417BDAC21A3124F00F33866 /* Usuario */,
 				84462A6121A47FB1002D55C8 /* Proveedor */,
@@ -421,11 +421,11 @@
 		84462A6221A47FEA002D55C8 /* Ventas */ = {
 			isa = PBXGroup;
 			children = (
-				84462A6521A47FF9002D55C8 /* CategoriasVC.swift */,
-				84462A6721A47FF9002D55C8 /* PedidosVC.swift */,
-				84462A6321A47FF8002D55C8 /* ProductoTBCell.swift */,
-				84462A6421A47FF8002D55C8 /* ProductoVC.swift */,
-				84462A6621A47FF9002D55C8 /* QRScanVC.swift */,
+				84D5BADF21C873F600236B34 /* CategoriasVC.swift */,
+				84D5BADE21C873F600236B34 /* PedidosVC.swift */,
+				84D5BADD21C873F500236B34 /* ProductoTBCell.swift */,
+				84D5BAE021C873F600236B34 /* ProductoVC.swift */,
+				84D5BADC21C873F500236B34 /* QRScanVC.swift */,
 			);
 			path = Ventas;
 			sourceTree = "<group>";
@@ -632,17 +632,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				8417BE0121A31A6700F33866 /* RegistroVC.swift in Sources */,
+				84D5BAE521C873F600236B34 /* ProductoVC.swift in Sources */,
 				8435A87921A7668800E19D0A /* CategoriaProducto.swift in Sources */,
 				845CCDB821BC53F40066AE27 /* Recarga.swift in Sources */,
 				84D7E09521C1E3C100F7A81E /* ListaPedidosVC.swift in Sources */,
 				8417BDE721A319B000F33866 /* HistorialVC.swift in Sources */,
 				84F7127421C00ABC000270ED /* ObraCVCell.swift in Sources */,
-				84462A6821A47FF9002D55C8 /* ProductoTBCell.swift in Sources */,
 				84EF975121BF46420088AC05 /* EntradaScanVC.swift in Sources */,
 				8417BDF121A319F000F33866 /* DetalleObraVC.swift in Sources */,
-				84462A6C21A47FF9002D55C8 /* PedidosVC.swift in Sources */,
+				84D5BAE421C873F600236B34 /* CategoriasVC.swift in Sources */,
 				8485EC0021BB14E7006CEC74 /* Entrada.swift in Sources */,
-				84462A6921A47FF9002D55C8 /* ProductoVC.swift in Sources */,
 				846DE64721BF4B3C003F1529 /* TicketVC.swift in Sources */,
 				84CB14DB21AF403500A7BF1E /* Reachability.swift in Sources */,
 				8404E1DD21C5696800BF1F77 /* ControlObrasVC.swift in Sources */,
@@ -652,7 +651,6 @@
 				84CB14CE21AF1B7800A7BF1E /* KontenedoreServices.swift in Sources */,
 				8401D82E21AC95930064AC01 /* CompraEntradaVC.swift in Sources */,
 				84D2AAA821A88E8700228C4E /* PerfilProveedorVC.swift in Sources */,
-				84462A6A21A47FF9002D55C8 /* CategoriasVC.swift in Sources */,
 				84D5BADB21C84C2200236B34 /* Venta.swift in Sources */,
 				84D2AAA621A88E6400228C4E /* HistorialPedidosVC.swift in Sources */,
 				8435A87321A765A000E19D0A /* Usuario.swift in Sources */,
@@ -664,8 +662,10 @@
 				8417BDFF21A31A6700F33866 /* LoginVC.swift in Sources */,
 				84C6362A21ADF75500A6D714 /* PagarVC.swift in Sources */,
 				8485EC0221BB3E61006CEC74 /* Producto.swift in Sources */,
-				84462A6B21A47FF9002D55C8 /* QRScanVC.swift in Sources */,
+				84D5BAE221C873F600236B34 /* ProductoTBCell.swift in Sources */,
+				84D5BAE121C873F600236B34 /* QRScanVC.swift in Sources */,
 				8417BD9121A3080100F33866 /* AppDelegate.swift in Sources */,
+				84D5BAE321C873F600236B34 /* PedidosVC.swift in Sources */,
 				8417BE0221A31A6700F33866 /* MesTBVC.swift in Sources */,
 				8417BDEF21A319F000F33866 /* EntradaVC.swift in Sources */,
 				8417BE0021A31A6700F33866 /* TarjetaVC.swift in Sources */,
