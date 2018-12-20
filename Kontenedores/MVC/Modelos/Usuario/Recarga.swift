@@ -19,6 +19,8 @@ struct Recarga : Decodable
     var cliente_id:Int
     var saldo:Double
     var fecha:String
+    var card_brand:String
+    var card_number:String
     var id_culqi:String
     var created_at:String
 }

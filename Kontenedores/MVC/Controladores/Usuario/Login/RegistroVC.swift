@@ -50,20 +50,30 @@ class RegistroVC: UIViewController {
     
     func registarUsuario()
     {
+        self.comprobarInternet { (disponible, msj) in
+            if !disponible
+            {
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                    self.mostrarAlerta(msj: msj)
+                }
+            }else
+            {
+                DispatchQueue.main.async(execute: self.registrarUsuarioWS)
+            }
+        }
+    }
+    
+    func registrarUsuarioWS()
+    {
         guard let nombre = nombreTxt.text,!nombre.isEmpty,let apellido = apellidoTxt.text,!apellido.isEmpty,let dni = dniTxt.text,!dni.isEmpty,dni.count == 8,let email = emailTxt.text,!email.isEmpty,let celular = celularTxt.text,!celular.isEmpty,celular.count >= 9,let contrasena = contrasenaTxt.text,!contrasena.isEmpty,let repetirContrasena = repetirContrasenaTxt.text,!repetirContrasena.isEmpty , contrasena == repetirContrasena
             else {
                 
-                let alertController = UIAlertController(title: "Kontenedores", message: "Verifica que todos los campos sean válidos.Puede que no hayas ingresado todo tu número celular,que el dni no esté completo u sea correcto o que las contraseñas no sean iguales.", preferredStyle: .alert)
-                
-                let ok = UIAlertAction(title: "Ok", style: .default, handler: nil)
-                alertController.addAction(ok)
-                
-                self.present(alertController, animated: true, completion: nil)
+                self.mostrarAlerta(msj: "Verifica que todos los campos sean válidos.Puede que no hayas ingresado todo tu número celular,que el dni no esté completo u sea correcto o que las contraseñas no sean iguales.")
                 
                 return
         }
         
-        //AppDelegate.instanciaCompartida.soyUsuario = true
         self.view.isUserInteractionEnabled = false
         activityIndicator.startAnimating()
         
@@ -71,34 +81,29 @@ class RegistroVC: UIViewController {
         
         KontenedoreServices.instancia.registrarUsuario(usuario: usuario) { (respuesta) in
             
-            if let respuesta = respuesta as? Bool,respuesta
+            let mensaje = respuesta as? String ?? "Lo sentimos,ocurrió un error al querer registrarte. Vuelve a intentarlo."
+            
+            if mensaje == "Se te ha enviado un mensaje a tu email para activar tu cuenta. Por favor, actívalo para poder iniciar sesión."
             {
                 print("Respuesta Exitosa")
                 
-                let alertController = UIAlertController(title: "Kontenedores", message: "Se te ha enviado un mensaje a tu email para activar tu cuenta.Por favor, actívalo para poder iniciar sesión.", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "Kontenedores", message: mensaje, preferredStyle: .alert)
                 
                 let ok = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
                     
                     self.performSegue(withIdentifier: "volverLogin", sender: self)
                     
                 })
-                alertController.addAction(ok)
                 
+                self.view.isUserInteractionEnabled = false
+                
+                alertController.addAction(ok)
                 self.present(alertController, animated: true, completion: nil)
                 
             }else
             {
-                let msj = respuesta as? String ?? "Lo sentimos,ocurrió un error al querer registrarte. Vuelve a intentarlo."
-                
-                let alertController = UIAlertController(title: "Kontenedores", message: msj, preferredStyle: .alert)
-                
-                let ok = UIAlertAction(title: "Ok", style: .default, handler:{ (action) in
-                   self.view.isUserInteractionEnabled = true
-                })
-                
-                alertController.addAction(ok)
-                
-                self.present(alertController, animated: true, completion: nil)
+                self.view.isUserInteractionEnabled = true
+                self.mostrarAlerta(msj: mensaje)
             }
             
             self.activityIndicator.stopAnimating()
@@ -163,7 +168,7 @@ extension RegistroVC : UITextFieldDelegate
         }
         
         if textField == contrasenaTxt{
-            centroYStackRegistro.constant = -120
+            centroYStackRegistro.constant = -140
             return repetirContrasenaTxt.becomeFirstResponder()
         }
         
@@ -173,10 +178,13 @@ extension RegistroVC : UITextFieldDelegate
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
         if textField == emailTxt
-        {centroYStackRegistro.constant = -80}
+        {centroYStackRegistro.constant = -100}
         
-        if textField == repetirContrasenaTxt || textField == contrasenaTxt
+        if textField == contrasenaTxt
         {centroYStackRegistro.constant = -140}
+        
+        if textField == repetirContrasenaTxt
+        {centroYStackRegistro.constant = -180}
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

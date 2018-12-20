@@ -32,6 +32,25 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
         obrasCV.delegate = self
         
         self.obtenerObras()
+        
+        if let miSaldo = AppDelegate.instanciaCompartida.usuario,miSaldo.saldo <= 0,AppDelegate.irRecargarSaldo
+        {
+            let alertController = UIAlertController(title: "Kontenedores", message: "No tienes saldo.Por favor,recárgalo en la pantalla Recargar Saldo.", preferredStyle: .alert)
+            
+            let ok = UIAlertAction(title: "Ok", style: .default) { (action) in
+                
+                self.performSegue(withIdentifier: "recargarSaldo", sender: self)
+                
+            }
+            let ahoraNo = UIAlertAction(title: "Ahora no", style: .default) { (action) in
+                AppDelegate.irRecargarSaldo = false
+            }
+            
+            alertController.addAction(ok)
+            alertController.addAction(ahoraNo)
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,24 +65,6 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        if let miSaldo = AppDelegate.instanciaCompartida.usuario,miSaldo.saldo <= 0
-        {
-            let alertController = UIAlertController(title: "Kontenedores", message: "No tienes saldo.Por favor,recárgalo en la pantalla Recargar Saldo.", preferredStyle: .alert)
-            
-            let ok = UIAlertAction(title: "Ok", style: .default) { (action) in
-                
-                self.performSegue(withIdentifier: "recargarSaldo", sender: self)
-                
-            }
-            let ahoraNo = UIAlertAction(title: "Ahora no", style: .default, handler: nil)
-            
-            alertController.addAction(ok)
-            alertController.addAction(ahoraNo)
-            
-            self.present(alertController, animated: true, completion: nil)
-        }
-        
         
         if !AppDelegate.permitirNotificaciones
         {
@@ -81,12 +82,12 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
     
     func pintarSaldoUsuario()
     {
-        if let usuario = AppDelegate.instanciaCompartida.usuario
+        if let usuario = AppDelegate.instanciaCompartida.usuario,usuario.saldo > 0
         {
             self.saldoLabel.text = "S/. \(usuario.saldo.valorNumerico2DecimalesStr())"
         }else
         {
-            self.saldoLabel.text = "0.00"
+            self.saldoLabel.text = "S/ 0.00"
         }
     }
     
@@ -94,6 +95,8 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
     
     func obtenerObras()
     {
+        //if !self.comprobarInternet() {return}
+        
         self.obras.removeAll()
         self.activityObras.startAnimating()
         

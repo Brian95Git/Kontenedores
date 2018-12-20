@@ -11,13 +11,18 @@ import UIKit
 class CompraEntradaVC: UIViewController {
 
     @IBOutlet weak var imgQR: UIImageView!
-    
-    var miEntrada : EntradaPreeliminar!
+    @IBOutlet weak var subTituloLabel: UILabel!
+    @IBOutlet weak var detalleLabel: UILabel!
+    //var miEntrada : EntradaPreeliminar!
+    var subtituloStr : String = ""
+    var detalleStr : String = ""
+    var idSegue : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        subTituloLabel.text = subtituloStr
+        detalleLabel.text = detalleStr
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle
@@ -28,23 +33,30 @@ class CompraEntradaVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        imgQR.image = self.generarCodidoQR()
+        //imgQR.image = self.generarCodidoQR()
     }
-
-    func generarCodidoQR() -> UIImage
-    {
-        let filterQR = CIFilter(name: "CIQRCodeGenerator")!
     
-        let infoEntrada = "\(miEntrada.nombreObra) - \(miEntrada.dia) - \(miEntrada.horario) - \(miEntrada.nroEntradas)"
-        
-        let dataEntrada = infoEntrada.data(using: .ascii, allowLossyConversion: false)
-        
-        filterQR.setValue(dataEntrada, forKey: "inputMessage")
-        let scalarImgQR = CGAffineTransform(scaleX: 15, y: 15)
-        let imgQR = UIImage(ciImage: filterQR.outputImage!.transformed(by: scalarImgQR))
-        
-        return imgQR
+    
+    @IBAction func continuarExplorando(_ sender: UIButton)
+    {
+        self.performSegue(withIdentifier: idSegue, sender: self)
     }
+    
+//    func generarCodidoQR() -> UIImage
+//    {
+//        let filterQR = CIFilter(name: "CIQRCodeGenerator")!
+//
+//        let infoEntrada = "\(miEntrada.nombreObra) - \(miEntrada.dia) - \(miEntrada.horario) - \(miEntrada.nroEntradas)"
+//
+//        let dataEntrada = infoEntrada.data(using: .ascii, allowLossyConversion: false)
+//
+//        filterQR.setValue(dataEntrada, forKey: "inputMessage")
+//        let scalarImgQR = CGAffineTransform(scaleX: 15, y: 15)
+//        let imgQR = UIImage(ciImage: filterQR.outputImage!.transformed(by: scalarImgQR))
+//
+//        return imgQR
+//    }
+    
     /*
     // MARK: - Navigation
 

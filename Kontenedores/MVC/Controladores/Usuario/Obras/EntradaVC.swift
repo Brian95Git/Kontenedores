@@ -62,6 +62,8 @@ class EntradaVC: UIViewController {
     
     @IBAction func comprarEntrada(_ sender: UIButton)
     {
+        //if !self.comprobarInternet() {return}
+        
         sender.titleEdgeInsets.right = 20
         self.activityComprar.startAnimating()
         
@@ -106,7 +108,12 @@ class EntradaVC: UIViewController {
         if segue.identifier == "goToCompraEntrada"
         {
             let compraEntradaVC = segue.destination as! CompraEntradaVC
-            compraEntradaVC.miEntrada = miEntrada
+            
+            compraEntradaVC.subtituloStr = "¡Tu compra se realizó exitosamente!"
+            
+            compraEntradaVC.detalleStr = "Puedes ver el detalle de tu entrada en la pantalla Mis entradas."
+            
+            compraEntradaVC.idSegue = "volverObras"
         }
     }
 }

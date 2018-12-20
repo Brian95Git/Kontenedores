@@ -42,7 +42,9 @@ class ControlObrasVC: BaseViewController,UITableViewDataSource,UITableViewDelega
     
     @objc func obtenerTodasLasObras()
     {
-        if let refrescando = self.controlObrasTV.refreshControl,refrescando.isRefreshing
+        //if !self.comprobarInternet() {return}
+        
+        if let refrescando = self.controlObrasTV.refreshControl,!refrescando.isRefreshing
         {
             self.obras.removeAll()
             self.presentaciones.removeAll()
@@ -69,8 +71,6 @@ class ControlObrasVC: BaseViewController,UITableViewDataSource,UITableViewDelega
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
-        guard !self.obras.isEmpty else {return "Sin Titulo"}
-        
         return self.obras[section].titulo
     }
     
@@ -93,7 +93,6 @@ class ControlObrasVC: BaseViewController,UITableViewDataSource,UITableViewDelega
         let compradasLabel = celda.contentView.viewWithTag(103) as! UILabel
         
         //let presentacion = obra
-        guard !self.presentaciones.isEmpty else {return celda}
         
         fechaLabel.text = self.obtenerMes(fechaStr: presentaciones[indexPath.row].dia)
         funcionLabel.text = presentaciones[indexPath.row].hora

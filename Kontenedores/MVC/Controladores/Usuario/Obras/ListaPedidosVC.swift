@@ -34,6 +34,8 @@ class ListaPedidosVC: UIViewController {
     
     @IBAction func aceptarPedido(_ sender: UIButton)
     {
+        //self.comprobarInternet()
+        
         sender.isUserInteractionEnabled = false
         self.activityAceptar.startAnimating()
         
@@ -42,11 +44,12 @@ class ListaPedidosVC: UIViewController {
     
     @IBAction func cancelarPedido(_ sender: UIButton)
     {
+        //if !self.comprobarInternet() {return}
+        
         sender.isUserInteractionEnabled = false
         self.activityCancelar.startAnimating()
         
         self.definirEstadoPedido(estatus: false, activity: self.activityCancelar)
-        
     }
     
     func definirEstadoPedido(estatus:Bool,activity:UIActivityIndicatorView)

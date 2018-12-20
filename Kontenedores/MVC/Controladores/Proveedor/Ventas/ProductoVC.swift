@@ -51,7 +51,9 @@ class ProductoVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Can
     
     @objc func obtenerProductos()
     {
-        if let refrescando = self.tablaProductos.refreshControl,refrescando.isRefreshing
+        //if !self.comprobarInternet() {return}
+        
+        if let refrescando = self.tablaProductos.refreshControl,!refrescando.isRefreshing
         {
             self.productos.removeAll()
         }

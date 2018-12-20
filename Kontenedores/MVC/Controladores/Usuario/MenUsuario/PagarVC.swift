@@ -54,7 +54,7 @@ class PagarVC: BaseViewController {
     
     func pintarSaldoUsuario()
     {
-        if let usuario = AppDelegate.instanciaCompartida.usuario
+        if let usuario = AppDelegate.instanciaCompartida.usuario,usuario.saldo > 0
         {
             self.sueldoUsuarioLabel.text = "S/ " + usuario.saldo.valorNumerico2DecimalesStr()
         }else

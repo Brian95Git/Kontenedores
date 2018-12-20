@@ -62,8 +62,9 @@ class MisEntradasVC: BaseViewController,UITableViewDelegate,UITableViewDataSourc
     
     @objc func obtenerEntradas()
     {
-        print("Llamo Obtener las Entradas")
-        if let refrescando = self.entradasTV.refreshControl,refrescando.isRefreshing
+        //if !self.comprobarInternet() {return}
+        
+        if let refrescando = self.entradasTV.refreshControl,!refrescando.isRefreshing
         {
             self.entradas.removeAll()
         }

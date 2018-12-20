@@ -16,10 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate,MessagingDelegate,UNUserNo
 
     static let instanciaCompartida = AppDelegate()
 
-    static var fcmToken : String = "123124124twfereferfergerfwedwqd3rf"
+    //static var fcmToken : String = "123124124twfereferfergerfwedwqd3rf"
     
     static var permitirNotificaciones : Bool = true
     static var pushConfirmacionPedido : Bool = false
+    static var irRecargarSaldo : Bool = true
     static var listaPedido = [Any]()
     
     //static var idCompra = 0
@@ -40,7 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate,MessagingDelegate,UNUserNo
             
             let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
             UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
-                
                 AppDelegate.permitirNotificaciones = granted
             }
             
@@ -60,15 +60,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate,MessagingDelegate,UNUserNo
     }
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        
-        print("FCM : Messaging Hemos recibido el Token Registrado : \(fcmToken)")
-        AppDelegate.fcmToken = fcmToken
+        print("FCM Messaging : Hemos recibido el Token Registrado : \(fcmToken)")
+        //AppDelegate.fcmToken = fcmToken
         //print("Ahora el fcm Token es", self.fcmToken)
     }
     
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
         print("FCM : Recibimos un mensaje .MessagingRemoteMessage")
     }
+    
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         
@@ -107,8 +107,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate,MessagingDelegate,UNUserNo
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
         Messaging.messaging().apnsToken = deviceToken
-        print("Device Token Apns :\(Messaging.messaging().apnsToken)")
+        //print("Device Token Apns :\(Messaging.messaging().apnsToken)")
     }
+    
+    
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

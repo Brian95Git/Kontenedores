@@ -51,6 +51,7 @@ class Usuario: NSObject,NSCoding {
         aCoder.encode(self.id,forKey:"id")
         aCoder.encode(self.nombre,forKey:"nombre")
         aCoder.encode(self.email,forKey:"email")
+        aCoder.encode(self.contrasena,forKey:"contrasena")
         aCoder.encode(self.celular,forKey:"celular")
         aCoder.encode(self.tipo,forKey:"tipo")
         aCoder.encode(self.token,forKey:"token")
@@ -61,6 +62,7 @@ class Usuario: NSObject,NSCoding {
         self.id = aDecoder.decodeInteger(forKey: "id")
         self.nombre = (aDecoder.decodeObject(forKey: "nombre") as? String)!
         self.email = (aDecoder.decodeObject(forKey: "email") as? String)!
+        self.contrasena = (aDecoder.decodeObject(forKey: "contrasena") as? String)!
         self.celular = (aDecoder.decodeObject(forKey: "celular") as? String)!
         self.tipo = (aDecoder.decodeObject(forKey: "tipo") as? String)!
         self.token = (aDecoder.decodeObject(forKey: "token") as? String)!

@@ -32,7 +32,7 @@ class TarjetaVC: UIViewController,UIPopoverPresentationControllerDelegate,UIAdap
         nroTarjeta.delegate = self
         cvcTxt.delegate = self
         
-        Culqi.setApiKey("pk_test_kF15NbtNvIA0LZX3")
+        Culqi.setApiKey("pk_test_AVVnajzvfO5Qp68s")
         
         activarOcultamientoTeclado()       
     }
@@ -82,26 +82,79 @@ class TarjetaVC: UIViewController,UIPopoverPresentationControllerDelegate,UIAdap
     
     @IBAction func confirmarRegistro(_ sender: UIButton)
     {
-        if btnMM.titleLabel?.text != "MM" && btnAAAA.titleLabel?.text != "AAAA" && cvcTxt.text?.count == 3 && nroTarjeta.text?.count == 19 && btnMonto.titleLabel?.text != "0.00 S/"
+        //if !self.comprobarInternet() {return}
+        
+        if btnMM.titleLabel?.text != "MM" && btnAAAA.titleLabel?.text != "AAAA" && cvcTxt.text?.count ?? 0 >= 3 && nroTarjeta.text?.count ?? 0 >= 14 && btnMonto.titleLabel?.text != "0.00"
         {
+            self.view.isUserInteractionEnabled = false
+            
             let usuario = AppDelegate.instanciaCompartida.usuario!
+        
+            let saldoStr = btnMonto.titleLabel?.text
+            let saldo = Double(saldoStr!)
             
-//            var numTarjeta = nroTarjeta.text!
+            activityIndicator.startAnimating()
+            var numTarjeta = nroTarjeta.text!
 //
-//            numTarjeta.removeAll { (char) -> Bool in
-//                return char == " "
-//            }
+            numTarjeta.removeAll { (char) -> Bool in
+                return char == " "
+            }
             
-            Culqi.sharedInstance().createToken(withCardNumber: nroTarjeta.text!, cvv: cvcTxt.text!, expirationMonth: btnMM.titleLabel!.text! , expirationYear: btnAAAA.titleLabel!.text!, email: usuario.email, metadata: nil, success: { (respuestaHeader, tokenCulqi) in
+            Culqi.sharedInstance().createToken(withCardNumber: "4111111111111111"/*numTarjeta*/, cvv:"123" /*cvcTxt.text!*/, expirationMonth:"09" /*self.btnMM.titleLabel!.text!*/ , expirationYear: "2020"/*self.btnAAAA.titleLabel!.text!*/, email: usuario.email, metadata: nil, success: { (respuestaHeader, tokenCulqi) in
                 
                 print("Se creo exitosamente el identifier : ",tokenCulqi.identifier)
+                
+                KontenedoreServices.instancia.recargarSaldo(tokenUsuario: usuario.token, saldo: saldo!, idCulqi: tokenCulqi.identifier) { (respuesta) in
+
+                    if let saldoActualizado = respuesta as? Double
+                    {
+                        //AppDelegate.instanciaCompartida.usuario!.saldo = saldoActualizado
+                        
+                        usuario.saldo = saldoActualizado
+                        
+//                        let alertController = UIAlertController(title: "Kontenedores", message: "Saldo recargado exitosamente.", preferredStyle: .alert)
+//
+//                        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+//
+//                        alertController.addAction(okAction)
+                        
+                        self.view.isUserInteractionEnabled = true
+                        self.activityIndicator.stopAnimating()
+                        
+                        self.performSegue(withIdentifier: "goToSaldoRecargado", sender: self)
+                        
+                        //self.present(alertController, animated: true, completion: nil)
+                    }else
+                    {
+                        let alertController = UIAlertController(title: "Kontenedores", message: "Lo sentimos,ocurrió un error al querer recargar tu saldo.", preferredStyle: .alert)
+                        
+                        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                        
+                        alertController.addAction(okAction)
+                        
+                        self.view.isUserInteractionEnabled = true
+                        self.activityIndicator.stopAnimating()
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                
+            }
                 
             }) { (respuestaErroe, clqError, error) in
                 
                 print("Error al generar token : ",clqError.merchantMessage , "-----",error.localizedDescription)
+                
+                let alertController = UIAlertController(title: "Kontenedores", message: clqError.merchantMessage, preferredStyle: .alert)
+                
+                let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                
+                alertController.addAction(okAction)
+                
+                self.present(alertController, animated: true, completion: nil)
+                
+                self.view.isUserInteractionEnabled = false
+                self.activityIndicator.stopAnimating()
             }
-            
-//            self.performSegue(withIdentifier: "goToObras", sender: self)
         }else
         {
             
@@ -145,6 +198,18 @@ class TarjetaVC: UIViewController,UIPopoverPresentationControllerDelegate,UIAdap
             popOver.listaNumeros = sender as! [String]
             popOver.tagBtn = self.tagBtn
         }
+        
+        if segue.identifier == "goToSaldoRecargado"
+        {
+            let saldoRecargado = segue.destination as! CompraEntradaVC
+            
+            saldoRecargado.subtituloStr = "¡Tu recarga se realizó exitosamente!"
+            
+            saldoRecargado.detalleStr = "Puedes ver el detalle de tu movimiento en la pantalla Mis recargas."
+            
+            saldoRecargado.idSegue = "volverSaldo"
+        
+        }
     }
  
 }
@@ -177,12 +242,12 @@ extension TarjetaVC : UITextFieldDelegate
             return conteo < 19
         }else
         {
-            if string == "" && conteo == 3
+            if string == "" && conteo == 4
             {
                 textField.text?.removeLast()
             }
             
-            return conteo < 3
+            return conteo < 4
         }
     }
 }

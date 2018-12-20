@@ -18,7 +18,7 @@ class KontenedoreServices: NSObject
     //MARK: REGISTRAR USUARIO
     
     func registrarUsuario(usuario:Usuario,bloqueCompletacion:@escaping(_ msj :Any?) -> Void)
-    {
+    {        
         let urlRegistro = urlBase + "/signup"
         
         let parametros : [String :String] = ["name":usuario.nombre + " " +  usuario.apellido,"dni":usuario.dni,"phone":usuario.celular,"email":usuario.email,"password":usuario.contrasena,"password_confirmation":usuario.repetirContrasena]
@@ -34,7 +34,8 @@ class KontenedoreServices: NSObject
 //            }
             
             let valor = respuesta.value as? [String:Any]
-            bloqueCompletacion(valor?["message"])
+            
+            bloqueCompletacion(valor?["message"] as? String)
         }
     }
     
@@ -48,11 +49,21 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlLogin, method: .post, parameters: parametros, encoding: URLEncoding.default, headers: [:]).responseJSON { (respuesta) in
             
-            //print("Resultado",respuesta.result)
-            //print("Data",respuesta.data)
-            print("Valor",respuesta.value)
-            let valor = respuesta.value
+            print("TIMELINE",respuesta.timeline)
+            print("INITIAL RESPONSE TIME",respuesta.timeline.initialResponseTime)
+            print("REQUEST DURATION",respuesta.timeline.requestDuration)
+            print(respuesta.timeline.totalDuration)
             
+//            if let data = respuesta.data {
+//                let json = String(data: data, encoding: String.Encoding.utf8)
+//                print("DATA RESPONSE INICIAR SESION : \(json)")
+//            }
+            
+            
+            //print("Data",respuesta.data)
+            //print("Valor",respuesta.value)
+            let valor = respuesta.value
+        
             if respuesta.result.isSuccess {
                 if let valorDict = valor as? [String:Any]
                 {
@@ -136,12 +147,29 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlSaldoDisponible, method: .post, parameters: parametros, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
             
-//            print("Resultado",respuesta.result)
-//            print("Valor",respuesta.value)
+            print("Resultado",respuesta.result)
+            print("Valor",respuesta.value)
             
+            if let data = respuesta.data {
+                let json = String(data: data, encoding: String.Encoding.utf8)
+                print("Data Recargar Saldo : \(json)")
+            }
+        
             if respuesta.result.isSuccess
             {
-                bloqueCompletacion(nil)
+                if let valor = respuesta.value,let valorDict = valor as? [String:Any]
+                {
+                    guard let saldoActualizado = valorDict["data"] as? Double else {
+                        bloqueCompletacion(nil)
+                        return
+                    }
+                    
+                    bloqueCompletacion(saldoActualizado)
+                }else
+                {
+                    bloqueCompletacion(nil)
+                }
+                
             }else
             {
                 bloqueCompletacion(nil)
@@ -606,10 +634,10 @@ class KontenedoreServices: NSObject
             print(respuesta.result)
             print(respuesta.value)
             
-            if let data = respuesta.data {
-                let json = String(data: data, encoding: String.Encoding.utf8)
-                print("Data Response de Actualizar Pedido: \(json)")
-            }
+//            if let data = respuesta.data {
+//                let json = String(data: data, encoding: String.Encoding.utf8)
+//                print("Data Response de Actualizar Pedido: \(json)")
+//            }
             
             print("Exito? :", respuesta.result.isSuccess)
             let valor = respuesta.value as? [String:Any]

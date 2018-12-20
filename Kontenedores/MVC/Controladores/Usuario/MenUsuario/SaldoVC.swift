@@ -29,9 +29,6 @@ class SaldoVC: BaseViewController,UITableViewDataSource,UITableViewDelegate {
         refreshControl.addTarget(self, action: #selector(self.obtenerRecargas), for: .valueChanged)
         
         self.movimientosTV.refreshControl = refreshControl
-        
-        self.obtenerRecargas()
-        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle
@@ -42,12 +39,17 @@ class SaldoVC: BaseViewController,UITableViewDataSource,UITableViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         btnRecargar.isUserInteractionEnabled = true
+        
+        self.obtenerRecargas()
+        
         self.pintarSaldoUsuario()
     }
     
     @objc func obtenerRecargas()
     {
-        if let refrescando = self.movimientosTV.refreshControl,refrescando.isRefreshing
+        //if !self.comprobarInternet() {return}
+        
+        if let refrescando = self.movimientosTV.refreshControl,!refrescando.isRefreshing
         {
             misRecargas.removeAll()
         }
@@ -61,6 +63,11 @@ class SaldoVC: BaseViewController,UITableViewDataSource,UITableViewDelegate {
             if let recargas = respuesta as? [Recarga]
             {
                 self.misRecargas = recargas
+                
+                /*self.misRecargas.sort(by: { (rec1, rec2) -> Bool in
+                    return rec1.id > rec2.id
+                })*/
+                
                 self.movimientosTV.refreshControl?.endRefreshing()
                 self.movimientosTV.reloadData()
                 self.activityIndicator.stopAnimating()
@@ -76,7 +83,6 @@ class SaldoVC: BaseViewController,UITableViewDataSource,UITableViewDelegate {
                 }
                 
                 alertController.addAction(okAction)
-                
                 self.present(alertController, animated: true, completion: nil)
             }
             
@@ -85,7 +91,7 @@ class SaldoVC: BaseViewController,UITableViewDataSource,UITableViewDelegate {
     
     func pintarSaldoUsuario()
     {
-        if let usuario = AppDelegate.instanciaCompartida.usuario
+        if let usuario = AppDelegate.instanciaCompartida.usuario,usuario.saldo > 0
         {
             self.saldoLabel.text = usuario.saldo.valorNumerico2DecimalesStr()
         }else
@@ -106,9 +112,11 @@ class SaldoVC: BaseViewController,UITableViewDataSource,UITableViewDelegate {
     {
         let celda = tableView.dequeueReusableCell(withIdentifier: "saldoCell", for: indexPath)
         
-        //let tarjetaLabel = celda.contentView.viewWithTag(100) as! UILabel
+        let tarjetaLabel = celda.contentView.viewWithTag(100) as! UILabel
         let fechaLabel = celda.contentView.viewWithTag(101) as! UILabel
         let recargaLabel = celda.contentView.viewWithTag(102) as! UILabel
+        
+        tarjetaLabel.text = "\(misRecargas[indexPath.row].card_brand) \(misRecargas[indexPath.row].card_number)"
         
         fechaLabel.text = self.obtenerMes(fechaStr: misRecargas[indexPath.row].fecha)
         recargaLabel.text = "S/. \(misRecargas[indexPath.row].saldo)"
@@ -134,6 +142,11 @@ class SaldoVC: BaseViewController,UITableViewDataSource,UITableViewDelegate {
     {
         sender.isUserInteractionEnabled = false
         self.performSegue(withIdentifier: "recargarSaldo", sender: self)
+    }
+    
+    @IBAction func volverSaldo(_ segue:UIStoryboardSegue)
+    {
+        
     }
     
     

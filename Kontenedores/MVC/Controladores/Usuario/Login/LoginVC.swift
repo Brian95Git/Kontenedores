@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import FirebaseMessaging
+import Firebase
+import Alamofire
 
 class LoginVC: UIViewController {
 
@@ -15,11 +18,12 @@ class LoginVC: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var btnIniciarSesion: UIButton!
-    @IBOutlet weak var topConstraintStackUser: NSLayoutConstraint!
+    @IBOutlet weak var centerYConstraintStackUser: NSLayoutConstraint!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         usuarioTxt.delegate = self
         contrasenaTxt.delegate = self
         
@@ -34,6 +38,8 @@ class LoginVC: UIViewController {
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
+        
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle
@@ -46,27 +52,17 @@ class LoginVC: UIViewController {
         if let usuarioLogueado = UserManager.userLogged() as? Usuario
         {
             print("Tenemos a un usuario ya logueado")
-            //self.btnIniciarSesion.isUserInteractionEnabled = false
+            //print("Token Usuario ",usuarioLogueado.token)
             self.activityIndicator.startAnimating()
             
             self.view.isUserInteractionEnabled = false
             
-//            self.usuarioTxt.isUserInteractionEnabled = false
-//            self.contrasenaTxt.isUserInteractionEnabled = false
+            self.usuarioTxt.text = usuarioLogueado.email
+            self.contrasenaTxt.text = usuarioLogueado.contrasena
+            
             AppDelegate.instanciaCompartida.usuario = usuarioLogueado
-            
-            print("Token Usuario ",usuarioLogueado.token)
-            
-            switch usuarioLogueado.tipo {
-            case "cliente" :
-                self.obtenerSaldoDisponible(token: usuarioLogueado.token)
-            case "proveedor","vendedor":
-                self.performSegue(withIdentifier: "goToProveedor", sender: self)
-            case "escaner":
-                self.performSegue(withIdentifier: "goToScanEntrada", sender: self)
-            default:
-                break
-            }
+        
+            self.iniciarSesion()
             
         }else
         {
@@ -76,7 +72,6 @@ class LoginVC: UIViewController {
     
     @IBAction func ingresarAction(_ sender: UIButton)
     {
-        sender.isUserInteractionEnabled = false
         self.iniciarSesion()
     }
     
@@ -84,87 +79,80 @@ class LoginVC: UIViewController {
     
     func iniciarSesion()
     {
-        guard let usuarioStr = usuarioTxt.text,!usuarioStr.isEmpty,let contra = contrasenaTxt.text,!contra.isEmpty else {
-            
-            let alertController = UIAlertController(title: "Kontenedores", message: "Ingresa tu usuario y contraseña por favor.", preferredStyle: .alert)
-            
-            let ok = UIAlertAction(title: "Ok", style: .default) { (action) in
-                 self.btnIniciarSesion.isUserInteractionEnabled = true
+        self.comprobarInternet { (disponible,msj) in
+            if !disponible
+            {
+                print("Internet no disponible : ", msj)
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                    self.mostrarAlerta(msj: msj)
+                }
+            }else
+            {
+                DispatchQueue.main.async(execute: self.iniciarSesionWS)
             }
-           
-            alertController.addAction(ok)
-            
-            self.present(alertController, animated: true, completion: nil)
-            
+        }
+    }
+
+    func iniciarSesionWS()
+    {
+        guard let usuarioStr = self.usuarioTxt.text,!usuarioStr.isEmpty,let contrasena = self.contrasenaTxt.text,!contrasena.isEmpty else {
+            self.mostrarAlerta(msj: "Ingresa tu usuario y contraseña por favor.")
             return
         }
         
-        //self.performSegue(withIdentifier: "goToProveedor", sender: self)
-//        self.usuarioTxt.isUserInteractionEnabled = false
-//        self.contrasenaTxt.isUserInteractionEnabled = false
         self.view.isUserInteractionEnabled = false
-        activityIndicator.startAnimating()
+        self.activityIndicator.startAnimating()
         
-        print("El Token de FCM es" , AppDelegate.fcmToken)
+        var tokenFcm = Messaging.messaging().fcmToken ?? "No Token de FireBase"
+        print("El Token de Messaging fcmToken es" , tokenFcm)
         
-        KontenedoreServices.instancia.iniciarSesion(email: usuarioStr, contrasena: contra, tokenFcm: AppDelegate.fcmToken) { (respuesta) in
-
+        InstanceID.instanceID().instanceID { (result, error) in
+            
+            if let error = error {
+                print("Error fetching remote instange ID: \(error)")
+            } else if let result = result {
+                print("Remote instance ID token: \(result.token)")
+                tokenFcm = result.token
+            }
+        }
+        
+        KontenedoreServices.instancia.iniciarSesion(email: usuarioStr, contrasena: contrasena, tokenFcm: tokenFcm) { (respuesta) in
+            
             if let usuario = respuesta as? Usuario
             {
                 AppDelegate.instanciaCompartida.usuario = usuario
+                AppDelegate.instanciaCompartida.usuario?.contrasena = contrasena
                 
-                if usuario.tipo == "cliente"
-                {
-                    print("Soy Cliente y obtengo mi saldo")
+                switch usuario.tipo {
+                case "cliente" :
                     self.obtenerSaldoDisponible(token: usuario.token)
-                }else if usuario.tipo  == "proveedor" || usuario.tipo  == "vendedor"
-                {
-                    AppDelegate.instanciaCompartida.usuario?.saldo = 0.00
+                case "proveedor","vendedor":
                     self.guardarUsuarioLocalmente()
-
+                    
                     self.view.isUserInteractionEnabled = true
                     self.activityIndicator.stopAnimating()
                     
                     self.performSegue(withIdentifier: "goToProveedor", sender: self)
-
-//                    self.usuarioTxt.isUserInteractionEnabled = true
-//                    self.contrasenaTxt.isUserInteractionEnabled = true
-            
-                }else
-                {
+                case "escaner":
                     self.guardarUsuarioLocalmente()
                     
                     self.view.isUserInteractionEnabled = true
                     self.activityIndicator.stopAnimating()
                     
                     self.performSegue(withIdentifier: "goToScanEntrada", sender: self)
-
-//                    self.usuarioTxt.isUserInteractionEnabled = true
-//                    self.contrasenaTxt.isUserInteractionEnabled = true
-                 
+                default:
+                    break
                 }
-
             }else
             {
-                //let msj = respuesta as? String ?? "Usuario o contraseña inválidos"
-                
-                let alertController = UIAlertController(title: "Kontenedores", message: "Usuario o contraseña inválidos", preferredStyle: .alert)
-
-                let ok = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
-                    self.view.isUserInteractionEnabled = true
-    
-                })
-
-                alertController.addAction(ok)
-
-                self.present(alertController, animated: true, completion: nil)
-
-//                self.usuarioTxt.isUserInteractionEnabled = true
-//                self.contrasenaTxt.isUserInteractionEnabled = true
+                self.view.isUserInteractionEnabled = true
+                self.mostrarAlerta(msj: "Usuario o contraseña inválidos.")
                 self.activityIndicator.stopAnimating()
             }
         }
     }
+
 
     //MARK: Obtener Saldo Disponible
     
@@ -182,9 +170,6 @@ class LoginVC: UIViewController {
                 self.activityIndicator.stopAnimating()
                 
                 self.performSegue(withIdentifier: "goToObras", sender: self)
-                
-//                self.usuarioTxt.isUserInteractionEnabled = true
-//                self.contrasenaTxt.isUserInteractionEnabled = true
             }else
             {
                 let msj = respuesta as? String ?? "Lo sentimos,tu token de usuario ha expirado.Inicia sesión de nuevo."
@@ -201,12 +186,11 @@ class LoginVC: UIViewController {
                 alertController.addAction(ok)
                 
                 //self.present(alertController, animated: true, completion: nil)
-              
-//                self.usuarioTxt.isUserInteractionEnabled = true
-//                self.contrasenaTxt.isUserInteractionEnabled = true
             }
         }
     }
+    
+
     
     func guardarUsuarioLocalmente()
     {
@@ -233,23 +217,17 @@ class LoginVC: UIViewController {
         {
             UIApplication.shared.open(urlResetOpen, options: [:], completionHandler: nil)
         }
-        
     }
-    
     
     @IBAction func volverLogin(segue:UIStoryboardSegue)
     {
         self.view.isUserInteractionEnabled = true
-        //self.btnIniciarSesion.isUserInteractionEnabled = true
         
         self.usuarioTxt.text = ""
         self.usuarioTxt.becomeFirstResponder()
         
         self.contrasenaTxt.text = ""
-        
-//        self.usuarioTxt.isUserInteractionEnabled = true
-//        self.contrasenaTxt.isUserInteractionEnabled = true
-        
+  
         self.activityIndicator.stopAnimating()
     }
 }
@@ -262,25 +240,75 @@ extension LoginVC : UITextFieldDelegate
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField == contrasenaTxt
-        {
-            self.topConstraintStackUser.constant = 0
-        }
+//        if textField == contrasenaTxt
+//        {
+//            self.centerYConstraintStackUser.constant = 0
+//        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == contrasenaTxt && contrasenaTxt.resignFirstResponder()
+        if textField == contrasenaTxt
         {
             print("Termine de Editar")
             self.iniciarSesion()
         }
         
-        self.topConstraintStackUser.constant = 40
+        //self.centerYConstraintStackUser.constant = 40
     }
 }
 
 extension UIViewController
 {
+    func comprobarConexionRed() -> Bool
+    {
+        return Reachability()!.isReachable
+    }
+    
+    func comprobarInternet(completionHandler: @escaping (Bool,String) -> Void)
+    {
+        // 1. Check the WiFi Connection
+        guard comprobarConexionRed() else {
+            completionHandler(false,"No estás conectado a ninguna red.")
+            return
+        }
+        
+        // 2. Check the Internet Connection but possibly use www.apple.com or www.alibaba.com instead of google.com because it's not available in China
+        let webAddress = "https://www.apple.com" // Default Web Site
+        
+        guard let url = URL(string: webAddress) else {
+            //print("could not create url from: \(webAddress)")
+            completionHandler(false, "null")
+            return
+        }
+        
+        let urlRequest = URLRequest(url: url)
+        let session = URLSession.shared
+        
+        let task = session.dataTask(with: urlRequest, completionHandler: { (data, response, error) in
+            if error != nil || response == nil {
+                completionHandler(false, "Revisa la intensidad de tu internet y vuelve a intentarlo.")
+            }else
+            {
+                completionHandler(true, "")
+            }
+        })
+        
+        task.resume()
+    }
+    
+    
+    func mostrarAlerta(msj:String)
+    {
+        let alertController = UIAlertController(title: "Kontenedores", message: msj, preferredStyle: .alert)
+        
+        let ok = UIAlertAction(title: "Ok", style: .default) { (action) in
+        }
+        
+        alertController.addAction(ok)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func activarOcultamientoTeclado()
     {
         let tapKeyboard = UITapGestureRecognizer(target: self, action: #selector(ocultarTeclado(sender:)))

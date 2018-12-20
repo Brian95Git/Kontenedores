@@ -15,7 +15,6 @@ class PerfilVC: BaseViewController{
     @IBOutlet weak var celularLabel: UILabel!
     @IBOutlet weak var saldoLabel: UILabel!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,7 +41,7 @@ class PerfilVC: BaseViewController{
     
     func pintarSaldoUsuario()
     {
-        if let usuario = AppDelegate.instanciaCompartida.usuario
+        if let usuario = AppDelegate.instanciaCompartida.usuario,usuario.saldo > 0
         {
             self.saldoLabel.text = "S/. " + usuario.saldo.valorNumerico2DecimalesStr()
         }else

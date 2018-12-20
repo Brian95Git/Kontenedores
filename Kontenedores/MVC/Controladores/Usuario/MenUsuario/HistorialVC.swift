@@ -48,7 +48,7 @@ class HistorialVC: BaseViewController,UITableViewDataSource,UITableViewDelegate 
     
     func pintarSaldoUsuario()
     {
-        if let usuario = AppDelegate.instanciaCompartida.usuario
+        if let usuario = AppDelegate.instanciaCompartida.usuario,usuario.saldo > 0
         {
             self.saldoLabel.text = usuario.saldo.valorNumerico2DecimalesStr()
         }else
@@ -59,6 +59,8 @@ class HistorialVC: BaseViewController,UITableViewDataSource,UITableViewDelegate 
 
     @objc func obtenerProductos()
     {
+        //if !self.comprobarInternet() {return}
+        
         if let refrescando = self.historialTV.refreshControl,!refrescando.isRefreshing
         {
             misCompras.removeAll()
@@ -73,9 +75,9 @@ class HistorialVC: BaseViewController,UITableViewDataSource,UITableViewDelegate 
             {
                 self.misCompras = compras
                 
-                self.misCompras.sort(by: { (com1, com2) -> Bool in
-                    return com1.id > com2.id
-                })
+//                self.misCompras.sort(by: { (com1, com2) -> Bool in
+//                    return com1.id > com2.id
+//                })
                 
                 self.historialTV.refreshControl?.endRefreshing()
                 self.historialTV.reloadData()

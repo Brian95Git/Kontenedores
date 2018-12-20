@@ -116,7 +116,9 @@ class CategoriasVC: BaseViewController,UITableViewDataSource,UITableViewDelegate
     
     @objc func obtenerCategorias()
     {
-        if let refrescando = self.tablaCategorias.refreshControl,refrescando.isRefreshing
+        //if !self.comprobarInternet() {return}
+        
+        if let refrescando = self.tablaCategorias.refreshControl,!refrescando.isRefreshing
         {
             CategoriasVC.categorias.removeAll()
         }

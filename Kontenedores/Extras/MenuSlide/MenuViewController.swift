@@ -207,7 +207,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     {
         let filterQR = CIFilter(name: "CIQRCodeGenerator")!
         
-        let infoEntrada = "123dqdqwdq41ocjicnieoni3j493niuohruwr3rr"
+        let id = AppDelegate.instanciaCompartida.usuario?.id
+        
+        let infoEntrada = String(id!)
         
         let dataEntrada = infoEntrada.data(using: .ascii, allowLossyConversion: false)
         
