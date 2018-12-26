@@ -24,22 +24,18 @@ class SplashKontenedoresVC: UIViewController {
         super.viewDidAppear(animated)
         
         var id : String!
-        //var idVC : String!
         
         if let _ = UserManager.userLogged() as? Usuario
         {
             id = "Login"
-            //idVC = "LoginVC"
         }else
         {
             id = "Obras"
-            //idVC = "ObrasVC"
         }
         
         let storyBoard = UIStoryboard(name: id, bundle: nil)
         let vc = storyBoard.instantiateInitialViewController()!
         self.navigationController!.pushViewController(vc, animated: true)
-        
         //self.performSegue(withIdentifier: id, sender: self)
     }
 

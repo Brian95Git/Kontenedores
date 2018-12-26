@@ -24,6 +24,7 @@ struct Obra : Decodable
     var updated_at :String
     var etiqueta:String
     var presentaciones : [Presentacion]?
+    var desplegarse : Bool? = false
 }
 
 struct Presentacion : Decodable
@@ -39,5 +40,4 @@ struct Presentacion : Decodable
     var disponibilidad : Bool
     var escaneados : Int
     var obra: Obra?
-    //var seleccionado : Bool? = false
 }
