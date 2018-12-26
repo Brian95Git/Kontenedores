@@ -62,25 +62,39 @@ class MisEntradasVC: BaseViewController,UITableViewDelegate,UITableViewDataSourc
     
     @objc func obtenerEntradas()
     {
-        //if !self.comprobarInternet() {return}
-        
-        if let refrescando = self.entradasTV.refreshControl,!refrescando.isRefreshing
-        {
-            self.entradas.removeAll()
-        }
-        
         self.entradasTV.refreshControl?.beginRefreshing()
         
+        self.comprobarInternet { (disponible, msj) in
+            
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.entradasTV.refreshControl?.endRefreshing()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.obtenerEntradaWS()
+                }
+            }
+        }
+    }
+    
+    func obtenerEntradaWS()
+    {
         let token = AppDelegate.instanciaCompartida.usuario?.token
         KontenedoreServices.instancia.obtenerEntradas(tokenUsuario: token!) { (respuesta) in
             
             if let entradas = respuesta as? [EntradaFactura]
             {
+                self.entradas.removeAll()
+                
                 entradas.forEach({ (factura) in
                     self.entradas += factura.detalles
                 })
-                
-                //print("Ya Obtuve las entradas")
+    
+                self.entradas.sort(by: { (ent1, ent2) -> Bool in
+                    return ent1.id > ent2.id
+                })
                 
                 self.entradasTV.refreshControl?.endRefreshing()
                 self.entradasTV.reloadData()
@@ -88,21 +102,11 @@ class MisEntradasVC: BaseViewController,UITableViewDelegate,UITableViewDataSourc
             }else
             {
                 print("Paso algo al querer obtener las entradas")
-                
-                let msj = respuesta as? String ?? "Lo sentimos,ocurrió un error al querer traer tus entradas."
-                
-                let alertController = UIAlertController(title: "Kontenedores", message: msj, preferredStyle: .alert)
-                
-                let okAction = UIAlertAction(title: "Aceptar", style: .default) { (action) in
-                }
-                
-                alertController.addAction(okAction)
-                
-                self.present(alertController, animated: true, completion: nil)
+                let msj = "Lo sentimos,ocurrió un error al querer traer tus entradas."
+                self.mostrarAlerta(msj: msj)
             }
         }
     }
-
     
     //MARK: TableView Entradas
     

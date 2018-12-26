@@ -41,51 +41,50 @@ class SaldoVC: BaseViewController,UITableViewDataSource,UITableViewDelegate {
         btnRecargar.isUserInteractionEnabled = true
         
         self.obtenerRecargas()
-        
         self.pintarSaldoUsuario()
     }
     
     @objc func obtenerRecargas()
     {
-        //if !self.comprobarInternet() {return}
-        
-        if let refrescando = self.movimientosTV.refreshControl,!refrescando.isRefreshing
-        {
-            misRecargas.removeAll()
-        }
-        
         self.movimientosTV.refreshControl?.beginRefreshing()
-      
+        
+        self.comprobarInternet { (disponible, msj) in
+        
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.movimientosTV.refreshControl?.endRefreshing()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.obtenerRecargasWS()
+                }
+            }
+        }
+    }
+    
+    func obtenerRecargasWS()
+    {
         let tokenUsuario = (AppDelegate.instanciaCompartida.usuario?.token)!
         
         KontenedoreServices.instancia.obtenerRecargas(tokenUsuario: tokenUsuario) { (respuesta) in
             
             if let recargas = respuesta as? [Recarga]
             {
+                self.misRecargas.removeAll()
                 self.misRecargas = recargas
                 
-                /*self.misRecargas.sort(by: { (rec1, rec2) -> Bool in
+                self.misRecargas.sort(by: { (rec1, rec2) -> Bool in
                     return rec1.id > rec2.id
-                })*/
-                
+                })
                 self.movimientosTV.refreshControl?.endRefreshing()
                 self.movimientosTV.reloadData()
-                self.activityIndicator.stopAnimating()
             }
             else
             {
-                let msj = respuesta as? String ?? "Lo sentimos,ocurrió un error al querer traer tus movimientos."
-                
-                let alertController = UIAlertController(title: "Kontenedores", message: msj, preferredStyle: .alert)
-                
-                let okAction = UIAlertAction(title: "Aceptar", style: .default) { (action) in
-                    
-                }
-                
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
+                let msj = "Lo sentimos,ocurrió un error al querer traer tus movimientos."
+                self.mostrarAlerta(msj: msj)
             }
-            
         }
     }
     

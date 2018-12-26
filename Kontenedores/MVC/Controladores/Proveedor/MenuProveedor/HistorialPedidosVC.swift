@@ -32,19 +32,31 @@ class HistorialPedidosVC: BaseViewController,UITableViewDataSource {
     
     @objc func obtenerVentasDelDia()
     {
-        if let refresh = ventasTV.refreshControl,!refresh.isRefreshing
-        {
-            ventas.removeAll()
-        }
-        
         ventasTV.refreshControl?.beginRefreshing()
         
+        self.comprobarInternet { (disponible, msj) in
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.ventasTV.refreshControl?.endRefreshing()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.obtenerVentasWS()
+                }
+            }
+        }
+    }
+    
+    func obtenerVentasWS()
+    {
         let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
         
         KontenedoreServices.instancia.obtenerVentasPorDia(tokenUsuario: tokenUsuario!) { (respuesta) in
             
             if let ventas = respuesta as? [Venta]
             {
+                self.ventas.removeAll()
                 self.ventas = ventas
                 
                 self.ventasTV.refreshControl?.endRefreshing()

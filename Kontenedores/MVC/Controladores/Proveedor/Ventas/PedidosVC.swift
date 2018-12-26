@@ -39,12 +39,6 @@ class PedidosVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Cant
             
             return idPedido
         })
-        
-//        CategoriasVC.pedidos.forEach { (pedido) in
-//        
-//            
-//            
-//        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle
@@ -104,7 +98,9 @@ class PedidosVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Cant
         
         CategoriasVC.precioActual = (CategoriasVC.precioActual <= 0) ? 0 : CategoriasVC.precioActual
         
-        totalLabel.text = "Total : S/ " + CategoriasVC.precioActual.valorNumerico2DecimalesStr()
+        let precioTotalStr = CategoriasVC.precioActual > 0 ? CategoriasVC.precioActual.valorNumerico2DecimalesStr() : "0.00"
+        
+        totalLabel.text = "Total : S/ " + precioTotalStr
         
         if producto.precio < 0 {producto.precio.negate()}
         
@@ -129,19 +125,6 @@ class PedidosVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Cant
             
             self.tablaPedidos.deleteRows(at: [indexPath], with: .left)
             self.tablaPedidos.reloadSections(indexSet, with: .none)
-            
-//            let pedidosPorCategoriaLista = CategoriasVC.pedidos.filter{ (pedido) -> Bool in
-//                return pedido.producto.nombreCategoria == nombresCategorias[seccionCelda]
-//            }
-//            
-//            if pedidosPorCategoriaLista.isEmpty
-//            {
-//                //self.tablaPedidos.deleteSections(indexSet, with: .left)
-//                self.tablaPedidos.reloadData()
-//            }else
-//            {
-//            
-//            }
         }
     }
     

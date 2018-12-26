@@ -64,34 +64,56 @@ class TicketVC: UIViewController {
     
     @IBAction func confirmarEntrada(_ sender: UIButton)
     {
+        self.actualizarEntrada(sender: sender)
+    }
+    
+    func actualizarEntrada(sender:UIButton)
+    {
         sender.isUserInteractionEnabled = false
         self.activityConfirmar.startAnimating()
         
+        self.comprobarInternet { (disponible, msj) in
+            
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    sender.isUserInteractionEnabled = true
+                    self.activityConfirmar.startAnimating()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.actualizarEntradaWS()
+                }
+            }
+        }
+    }
+    
+    func actualizarEntradaWS()
+    {
         let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
         
-        KontenedoreServices.instancia.actualizarEntrada(tokenUsuario: tokenUsuario!, idEntrada: ticket.entrada.id) { (respuesta) in
-    
-            if let _ = respuesta as? Bool
-            {
-                let alertController = UIAlertController(title: "Kontenedores", message: "Entrada Confirmada.", preferredStyle: .alert)
-                
-                let ok = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
-                    
-                    self.stackCanCon.isHidden = true
-                    self.asistioLabel.isHidden = false
-                    //self.performSegue(withIdentifier: "regresarSegue", sender: self)
-                })
-                
-                alertController.addAction(ok)
-                
-                self.present(alertController, animated: true, completion: nil)
-                
-                self.activityConfirmar.stopAnimating()
-            }
+        KontenedoreServices.instancia.actualizarEntrada(tokenUsuario: tokenUsuario!, idEntrada: self.ticket.entrada.id) { (respuesta) in
             
+            let msj = respuesta as? String ?? "Entrada Confirmada."
+            
+            let alertController = UIAlertController(title: "Kontenedores", message: msj, preferredStyle: .alert)
+            
+            let ok = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
+                
+                self.stackCanCon.isHidden = true
+                self.asistioLabel.isHidden = false
+                //self.performSegue(withIdentifier: "regresarSegue", sender: self)
+            })
+            
+            alertController.addAction(ok)
+            
+            self.present(alertController, animated: true, completion: nil)
+            
+            self.activityConfirmar.stopAnimating()
         }
-        
     }
+    
+    
     
     @IBAction func cancelarEntrada(_ sender: UIButton)
     {

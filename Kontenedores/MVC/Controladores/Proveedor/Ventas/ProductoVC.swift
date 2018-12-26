@@ -46,26 +46,38 @@ class ProductoVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Can
         
         self.obtenerProductos()
         
-        precioTotalLabel.text = "Total : S/ " + CategoriasVC.precioActual.valorNumerico2DecimalesStr()
+        let precioTotalStr = CategoriasVC.precioActual > 0 ? CategoriasVC.precioActual.valorNumerico2DecimalesStr() : "0.00"
+        
+        precioTotalLabel.text = "Total : S/ " + precioTotalStr
     }
     
     @objc func obtenerProductos()
     {
-        //if !self.comprobarInternet() {return}
-        
-        if let refrescando = self.tablaProductos.refreshControl,!refrescando.isRefreshing
-        {
-            self.productos.removeAll()
-        }
-        
         self.tablaProductos.refreshControl?.beginRefreshing()
         
+        self.comprobarInternet { (disponible, msj) in
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.tablaProductos.refreshControl?.endRefreshing()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.obtenerProductosWS()
+                }
+            }
+        }
+    }
+
+    func obtenerProductosWS()
+    {        
         let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
         
         KontenedoreServices.instancia.obtenerProductosDeCategoria(tokenUsuario: tokenUsuario!,idCategoria:categoria.id) { (respuesta) in
             
             if let productosCategoria = respuesta as? ProductosCategoria
             {
+                self.productos.removeAll()
                 self.productos = productosCategoria.categoria.productos!
                 
                 self.tablaProductos.refreshControl?.endRefreshing()
@@ -73,7 +85,7 @@ class ProductoVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Can
             }
         }
     }
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

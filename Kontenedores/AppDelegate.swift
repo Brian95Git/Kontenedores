@@ -16,24 +16,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate,MessagingDelegate,UNUserNo
 
     static let instanciaCompartida = AppDelegate()
 
-    //static var fcmToken : String = "123124124twfereferfergerfwedwqd3rf"
-    
-    static var permitirNotificaciones : Bool = true
     static var pushConfirmacionPedido : Bool = false
     static var irRecargarSaldo : Bool = true
     static var listaPedido = [Any]()
-    
-    //static var idCompra = 0
-    
-    //static var montoCompra : Double = 0
-    
+  
     var usuario:Usuario?
-    
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-
+        //sleep(UInt32(0.5))
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
             
@@ -41,7 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate,MessagingDelegate,UNUserNo
             
             let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
             UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
-                AppDelegate.permitirNotificaciones = granted
             }
             
         } else {
@@ -60,13 +51,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate,MessagingDelegate,UNUserNo
     }
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        print("FCM Messaging : Hemos recibido el Token Registrado : \(fcmToken)")
+        //print("FCM Messaging : Hemos recibido el Token Registrado : \(fcmToken)")
         //AppDelegate.fcmToken = fcmToken
         //print("Ahora el fcm Token es", self.fcmToken)
     }
     
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
-        print("FCM : Recibimos un mensaje .MessagingRemoteMessage")
+        print("FCM : Recibimos un mensaje MessagingRemoteMessage")
     }
     
     
@@ -96,8 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,MessagingDelegate,UNUserNo
         
         let lista : [Any] = [Int(idCompraStr)!,Double(montoStr)!]
         AppDelegate.listaPedido = lista
-//        print(lista.first as? Int ?? 0)
-//        print(lista.last as? Double ?? 0)
+
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ListaPedidos"), object: nil)
         
         completionHandler()

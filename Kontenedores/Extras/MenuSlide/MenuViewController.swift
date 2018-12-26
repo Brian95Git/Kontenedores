@@ -50,7 +50,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var menuOptionSelect : [String] = []
 
-    var usuario : Usuario!
+    var tipoUsuario : String = "cliente"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,9 +61,10 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //tblMenuOptions.tableFooterView = UIView()
        
-        usuario = AppDelegate.instanciaCompartida.usuario!
+        let usuario = AppDelegate.instanciaCompartida.usuario
+        tipoUsuario = usuario?.tipo ?? "cliente"
         
-        switch usuario.tipo {
+        switch tipoUsuario {
         case "cliente" :
             menuOptionSelect = userOptions
         case "proveedor":
@@ -138,7 +139,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //imgIcon.image = UIImage(named: arrayMenuOptions[indexPath.row]["icon"]!)
         //lblTitle.text = arrayMenuOptions[indexPath.row]["title"]!
         
-        if usuario.tipo == "cliente"
+        if tipoUsuario == "cliente"
         {
             switch indexPath.row {
             case 0:
@@ -176,30 +177,52 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if indexPath.row == menuOptionSelect.count - 1
         {
             print("Tocamos la ultima celda")
-            //self.tblMenuOptions.isUserInteractionEnabled = false
-            //activity.hidesWhenStopped = true
+            self.tblMenuOptions.isUserInteractionEnabled = false
+            self.btnCloseMenuOverlay.isUserInteractionEnabled = false
+            self.btnSmallCloseMenuOverlay.isUserInteractionEnabled = false
+
             let cell : UITableViewCell = tableView.cellForRow(at: indexPath)!
             let activity = cell.contentView.viewWithTag(104) as! UIActivityIndicatorView
-            
             activity.startAnimating()
             
             let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
 
             KontenedoreServices.instancia.cerrarSesion(tokenUsuario: tokenUsuario!) { (respuesta) in
-                _ = UserManager.deleteUserLogged(nil)
-                self.performSegue(withIdentifier: "logoutSegue", sender: nil)
+                
+                print("CERRAMOS SESION")
+                DispatchQueue.main.async {
+                    _ = UserManager.deleteUserLogged(nil)
+                    AppDelegate.instanciaCompartida.usuario = nil
+                    
+                    guard let vcActual = self.navigationController?.topViewController else {return}
+                    
+                    switch vcActual
+                    {
+                    case is ObrasVC:
+                        btn.tag = 1
+                        self.onCloseMenuClick(btn)
+                        
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "UsuarioDeslogueado"), object: nil)
+                    case is CategoriasVC:
+                        
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "UsuarioDeslogueado"), object: nil)
+                        self.performSegue(withIdentifier: "volverObras", sender: nil)
+                    default:
+                        self.performSegue(withIdentifier: "volverObras", sender: nil)
+                    }
+                }
             }
-            
+
         }else
         {
-            self.onCloseMenuClick(btn)
+           self.onCloseMenuClick(btn)
         }
     }
  
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         let esCliente :
-            CGFloat = (usuario.tipo == "cliente") ? ((indexPath.row == 0) ? 100 : 60) : 60
+            CGFloat = (self.tipoUsuario == "cliente") ? ((indexPath.row == 0) ? 100 : 60) : 60
         return esCliente
     }
     

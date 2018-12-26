@@ -73,29 +73,59 @@ class TarjetaVC: UIViewController,UIPopoverPresentationControllerDelegate,UIAdap
         
         let originSender = sender.convert(sender.frame.origin, to: self.view)
         
-        anclaPopOver.frame.origin.x = originSender.x + sender.bounds.width / 2 - anclaPopOver.bounds.width / 2
+        print(originSender.x)
+        print(originSender.y)
+        print("-----------------------")
+        
+        anclaPopOver.frame.origin.x = originSender.x + (sender.bounds.width / 2 - anclaPopOver.bounds.width / 2)
 
         anclaPopOver.frame.origin.y = (originSender.y - sender.frame.origin.y) + sender.bounds.height
         
+        print(sender.bounds.width)
+        print(sender.bounds.height)
+        print("-----------------------")
+        
+        print(anclaPopOver.frame.origin.x)
+        print(anclaPopOver.frame.origin.y)
         self.performSegue(withIdentifier: "goToMMAAMonto", sender: listaNumeros)
     }
     
     @IBAction func confirmarRegistro(_ sender: UIButton)
     {
-        //if !self.comprobarInternet() {return}
+        self.recargarSaldo()
+    }
+    
+    func recargarSaldo()
+    {
+        self.activityIndicator.startAnimating()
+        self.view.isUserInteractionEnabled = false
         
+        self.comprobarInternet { (disponible, msj) in
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.view.isUserInteractionEnabled = true
+                    self.activityIndicator.stopAnimating()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.recargarSaldoWS()
+                }
+            }
+        }
+    }
+
+    func recargarSaldoWS()
+    {
         if btnMM.titleLabel?.text != "MM" && btnAAAA.titleLabel?.text != "AAAA" && cvcTxt.text?.count ?? 0 >= 3 && nroTarjeta.text?.count ?? 0 >= 14 && btnMonto.titleLabel?.text != "0.00"
         {
-            self.view.isUserInteractionEnabled = false
-            
             let usuario = AppDelegate.instanciaCompartida.usuario!
-        
+            
             let saldoStr = btnMonto.titleLabel?.text
             let saldo = Double(saldoStr!)
-            
-            activityIndicator.startAnimating()
+        
             var numTarjeta = nroTarjeta.text!
-//
+            //
             numTarjeta.removeAll { (char) -> Bool in
                 return char == " "
             }
@@ -105,67 +135,38 @@ class TarjetaVC: UIViewController,UIPopoverPresentationControllerDelegate,UIAdap
                 print("Se creo exitosamente el identifier : ",tokenCulqi.identifier)
                 
                 KontenedoreServices.instancia.recargarSaldo(tokenUsuario: usuario.token, saldo: saldo!, idCulqi: tokenCulqi.identifier) { (respuesta) in
-
+                    
                     if let saldoActualizado = respuesta as? Double
                     {
-                        //AppDelegate.instanciaCompartida.usuario!.saldo = saldoActualizado
-                        
                         usuario.saldo = saldoActualizado
-                        
-//                        let alertController = UIAlertController(title: "Kontenedores", message: "Saldo recargado exitosamente.", preferredStyle: .alert)
-//
-//                        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-//
-//                        alertController.addAction(okAction)
-                        
-                        self.view.isUserInteractionEnabled = true
-                        self.activityIndicator.stopAnimating()
-                        
                         self.performSegue(withIdentifier: "goToSaldoRecargado", sender: self)
-                        
-                        //self.present(alertController, animated: true, completion: nil)
                     }else
                     {
-                        let alertController = UIAlertController(title: "Kontenedores", message: "Lo sentimos,ocurrió un error al querer recargar tu saldo.", preferredStyle: .alert)
-                        
-                        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-                        
-                        alertController.addAction(okAction)
-                        
-                        self.view.isUserInteractionEnabled = true
-                        self.activityIndicator.stopAnimating()
-                        
-                        self.present(alertController, animated: true, completion: nil)
+                        self.mostrarAlerta(msj: "Lo sentimos,ocurrió un error al querer recargar tu saldo.")
                     }
-                
-            }
+                    
+                    self.view.isUserInteractionEnabled = true
+                    self.activityIndicator.stopAnimating()
+                }
                 
             }) { (respuestaErroe, clqError, error) in
                 
                 print("Error al generar token : ",clqError.merchantMessage , "-----",error.localizedDescription)
                 
-                let alertController = UIAlertController(title: "Kontenedores", message: clqError.merchantMessage, preferredStyle: .alert)
-                
-                let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-                
-                alertController.addAction(okAction)
-                
-                self.present(alertController, animated: true, completion: nil)
-                
-                self.view.isUserInteractionEnabled = false
+                self.view.isUserInteractionEnabled = true
                 self.activityIndicator.stopAnimating()
+                
+                self.mostrarAlerta(msj: clqError.merchantMessage)
             }
         }else
         {
-            
+            self.view.isUserInteractionEnabled = true
+            self.activityIndicator.stopAnimating()
         }
-
     }
     
     @IBAction func volverRecargar(_ segue:UIStoryboardSegue)
     {
-//        let regresarVC = segue.source
-//        self.navigationController?.pushViewController(regresarVC, animated: true)
         self.navigationController?.popViewController(animated: true)
     }
 
@@ -208,7 +209,6 @@ class TarjetaVC: UIViewController,UIPopoverPresentationControllerDelegate,UIAdap
             saldoRecargado.detalleStr = "Puedes ver el detalle de tu movimiento en la pantalla Mis recargas."
             
             saldoRecargado.idSegue = "volverSaldo"
-        
         }
     }
  

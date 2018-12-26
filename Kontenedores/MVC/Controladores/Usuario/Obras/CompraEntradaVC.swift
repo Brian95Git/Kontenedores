@@ -32,13 +32,13 @@ class CompraEntradaVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         //imgQR.image = self.generarCodidoQR()
     }
     
     
     @IBAction func continuarExplorando(_ sender: UIButton)
     {
+        sender.isUserInteractionEnabled = false
         self.performSegue(withIdentifier: idSegue, sender: self)
     }
     

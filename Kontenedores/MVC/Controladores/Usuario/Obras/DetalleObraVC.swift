@@ -231,21 +231,19 @@ class DetalleObraVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
     
     @IBAction func comprarEntradas(_ sender: UIButton)
     {
-        guard let _ = funcionesTV.indexPathForSelectedRow
-        else
+        guard let _ = AppDelegate.instanciaCompartida.usuario else
         {
-            print("Selecciona una celda antes de comprar.")
-            let alertCtroller = UIAlertController(title: "Kontenedores", message: "Por favor, selecciona una función antes de comprar.", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-            alertCtroller.addAction(okAction)
-            
-            self.present(alertCtroller, animated: true, completion: nil)
-            
+            self.performSegue(withIdentifier: "goToLogin", sender: self)
             return
         }
         
-//        print("Indice Celda es ",indiceCelda)
-//        print("Horario Obra",horarioObraSelect)
+        guard let _ = funcionesTV.indexPathForSelectedRow
+        else
+        {
+            self.mostrarAlerta(msj: "Por favor, selecciona una función antes de comprar.")
+            return
+        }
+        
         self.miEntrada.nombreObra = self.nombreObraLabel.text!
         self.miEntrada.dia = self.diaEscogido
         self.miEntrada.nroEntradas = Int(self.nroEntradaLabel.text!)!
@@ -265,6 +263,12 @@ class DetalleObraVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
         {
             let entradaVC = segue.destination as! EntradaVC
             entradaVC.miEntrada = sender as? EntradaPreeliminar
+        }
+        
+        if segue.identifier == "goToLogin"
+        {
+            let loginVC = segue.destination as! LoginVC
+            loginVC.ocultarBtn = false
         }
     }
 }

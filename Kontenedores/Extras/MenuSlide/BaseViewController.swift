@@ -21,11 +21,13 @@ class BaseViewController: UIViewController, SlideMenuDelegate {
     }
     
     func slideMenuItemSelectedAtIndex(_ index: Int32) {
-        let topViewController : UIViewController = self.navigationController!.topViewController!
+        
+        guard let topViewController : UIViewController = self.navigationController?.topViewController else {return}
+        
         print("View Controller is : \(topViewController) \n", terminator: "")
         
-        let usuario = AppDelegate.instanciaCompartida.usuario!
-        let tipoUsuario = usuario.tipo
+        let usuario = AppDelegate.instanciaCompartida.usuario
+        let tipoUsuario = usuario?.tipo ?? "cliente"
         
         switch(index){
         case 0:
@@ -45,7 +47,7 @@ class BaseViewController: UIViewController, SlideMenuDelegate {
             self.openViewControllerBasedOnIdentifier(id)
             break
         case 1:
-//            print("Vamos a la pantalla Saldo")
+            print("Vamos a la pantalla Saldo")
             var id = ""
             
             switch tipoUsuario
@@ -71,8 +73,6 @@ class BaseViewController: UIViewController, SlideMenuDelegate {
                 id = "SaldoVC"
             case "proveedor":
                 id = "ProviderPerfilVC"
-            case "escaner":
-                id = ""
             default:
                 break
             }

@@ -29,7 +29,7 @@ class RegistroVC: UIViewController {
         
         nombreTxt.delegate = self
         apellidoTxt.delegate = self
-        dniTxt.delegate = self
+        //dniTxt.delegate = self
         emailTxt.delegate = self
         celularTxt.delegate = self
         contrasenaTxt.delegate = self
@@ -50,62 +50,63 @@ class RegistroVC: UIViewController {
     
     func registarUsuario()
     {
+        self.view.isUserInteractionEnabled = false
+        activityIndicator.startAnimating()
+        
         self.comprobarInternet { (disponible, msj) in
-            if !disponible
-            {
-                DispatchQueue.main.async {
+            
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.view.isUserInteractionEnabled = true
                     self.activityIndicator.stopAnimating()
                     self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.registrarUsuarioWS()
                 }
-            }else
-            {
-                DispatchQueue.main.async(execute: self.registrarUsuarioWS)
             }
         }
     }
     
     func registrarUsuarioWS()
     {
-        guard let nombre = nombreTxt.text,!nombre.isEmpty,let apellido = apellidoTxt.text,!apellido.isEmpty,let dni = dniTxt.text,!dni.isEmpty,dni.count == 8,let email = emailTxt.text,!email.isEmpty,let celular = celularTxt.text,!celular.isEmpty,celular.count >= 9,let contrasena = contrasenaTxt.text,!contrasena.isEmpty,let repetirContrasena = repetirContrasenaTxt.text,!repetirContrasena.isEmpty , contrasena == repetirContrasena
+        guard let nombre = nombreTxt.text,!nombre.isEmpty,let apellido = apellidoTxt.text,!apellido.isEmpty,let email = emailTxt.text,!email.isEmpty,let celular = celularTxt.text,!celular.isEmpty,celular.count >= 9,let contrasena = contrasenaTxt.text,!contrasena.isEmpty,let repetirContrasena = repetirContrasenaTxt.text,!repetirContrasena.isEmpty , contrasena == repetirContrasena
             else {
                 
-                self.mostrarAlerta(msj: "Verifica que todos los campos sean válidos.Puede que no hayas ingresado todo tu número celular,que el dni no esté completo u sea correcto o que las contraseñas no sean iguales.")
+                self.view.isUserInteractionEnabled = true
+                activityIndicator.stopAnimating()
+                
+                self.mostrarAlerta(msj: "Verifica que los campos sean válidos.Puede que no hayas ingresado todo tu número celular o que las contraseñas no sean iguales.")
                 
                 return
         }
         
-        self.view.isUserInteractionEnabled = false
-        activityIndicator.startAnimating()
-        
-        let usuario = Usuario(nombre: nombre, apellido: apellido, dni: dni,celular: celular, email: email, contrasena: contrasena, repetirContrasena: repetirContrasena)
+        let usuario = Usuario(nombre: nombre, apellido: apellido, dni:  self.dniTxt.text!,celular: celular, email: email, contrasena: contrasena, repetirContrasena: repetirContrasena)
         
         KontenedoreServices.instancia.registrarUsuario(usuario: usuario) { (respuesta) in
-            
+
             let mensaje = respuesta as? String ?? "Lo sentimos,ocurrió un error al querer registrarte. Vuelve a intentarlo."
-            
+
             if mensaje == "Se te ha enviado un mensaje a tu email para activar tu cuenta. Por favor, actívalo para poder iniciar sesión."
             {
-                print("Respuesta Exitosa")
-                
                 let alertController = UIAlertController(title: "Kontenedores", message: mensaje, preferredStyle: .alert)
-                
+
                 let ok = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
-                    
+
                     self.performSegue(withIdentifier: "volverLogin", sender: self)
-                    
+
                 })
-                
-                self.view.isUserInteractionEnabled = false
-                
+
                 alertController.addAction(ok)
                 self.present(alertController, animated: true, completion: nil)
-                
+
             }else
             {
-                self.view.isUserInteractionEnabled = true
                 self.mostrarAlerta(msj: mensaje)
             }
             
+            self.view.isUserInteractionEnabled = true
             self.activityIndicator.stopAnimating()
         }
     }
@@ -172,6 +173,12 @@ extension RegistroVC : UITextFieldDelegate
             return repetirContrasenaTxt.becomeFirstResponder()
         }
         
+        if textField == repetirContrasenaTxt
+        {
+            print("Pulse Aceptar en Repetir Contraseña")
+            self.registarUsuario()
+        }
+        
         return textField.resignFirstResponder()
     }
     
@@ -189,10 +196,5 @@ extension RegistroVC : UITextFieldDelegate
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         centroYStackRegistro.constant = 0
-        
-        if textField == repetirContrasenaTxt
-        {
-            self.registarUsuario()
-        }
     }
 }

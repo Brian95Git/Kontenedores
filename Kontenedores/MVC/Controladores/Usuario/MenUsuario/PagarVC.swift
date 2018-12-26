@@ -41,10 +41,7 @@ class PagarVC: BaseViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
         super.viewDidAppear(animated)
-        
-        print("Did Appear Pagar VC")
         
         if AppDelegate.pushConfirmacionPedido
         {

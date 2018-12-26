@@ -84,19 +84,33 @@ class EntradaScanVC: BaseViewController,AVCaptureMetadataOutputObjectsDelegate
                     {
                         self.idEntrada = Int(object.stringValue!)
                         
-                        let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
-                        
-                        KontenedoreServices.instancia.obtenerEntrada(tokenUsuario: tokenUsuario!, idEntrada: idEntrada!) { (respuesta) in
+                        self.comprobarInternet { (disponible, msj) in
                             
-                            if let ticket = respuesta as? Ticket
-                            {
-                                print("Obtenemos el ticket del Usuario")
-                                self.performSegue(withIdentifier: "goToTicket", sender: ticket)
+                            DispatchQueue.main.async {
+                                if !disponible
+                                {
+                                    self.mostrarAlerta(msj: msj)
+                                }else
+                                {
+                                    self.obtenerEntradaWS()
+                                }
                             }
                         }
                     }
-                    
                 }
+            }
+        }
+    }
+    
+    func obtenerEntradaWS()
+    {
+        let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
+        
+        KontenedoreServices.instancia.obtenerEntrada(tokenUsuario: tokenUsuario!, idEntrada: idEntrada!) { (respuesta) in
+            
+            if let ticket = respuesta as? Ticket
+            {
+                self.performSegue(withIdentifier: "goToTicket", sender: ticket)
             }
         }
     }

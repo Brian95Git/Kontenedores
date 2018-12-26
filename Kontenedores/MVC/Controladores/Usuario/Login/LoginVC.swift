@@ -17,9 +17,11 @@ class LoginVC: UIViewController {
     @IBOutlet weak var contrasenaTxt: UITextField!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var btnRegresar: UIButton!
     @IBOutlet weak var btnIniciarSesion: UIButton!
     @IBOutlet weak var centerYConstraintStackUser: NSLayoutConstraint!
     
+    var ocultarBtn : Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,18 +30,21 @@ class LoginVC: UIViewController {
         contrasenaTxt.delegate = self
         
         activarOcultamientoTeclado()
+        
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.btnRegresar.isHidden = ocultarBtn
         self.consultarUsuarioLogueado()
+        //usuarioTxt.becomeFirstResponder()
     }
     
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
-        
-        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle
@@ -53,14 +58,10 @@ class LoginVC: UIViewController {
         {
             print("Tenemos a un usuario ya logueado")
             //print("Token Usuario ",usuarioLogueado.token)
-            self.activityIndicator.startAnimating()
-            
-            self.view.isUserInteractionEnabled = false
+            AppDelegate.instanciaCompartida.usuario = usuarioLogueado
             
             self.usuarioTxt.text = usuarioLogueado.email
             self.contrasenaTxt.text = usuarioLogueado.contrasena
-            
-            AppDelegate.instanciaCompartida.usuario = usuarioLogueado
         
             self.iniciarSesion()
             
@@ -79,17 +80,22 @@ class LoginVC: UIViewController {
     
     func iniciarSesion()
     {
+        self.view.isUserInteractionEnabled = false
+        self.activityIndicator.startAnimating()
+        
         self.comprobarInternet { (disponible,msj) in
-            if !disponible
-            {
-                print("Internet no disponible : ", msj)
-                DispatchQueue.main.async {
+            
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    print("Internet no disponible : ", msj)
+                    self.view.isUserInteractionEnabled = true
                     self.activityIndicator.stopAnimating()
                     self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.iniciarSesionWS()
                 }
-            }else
-            {
-                DispatchQueue.main.async(execute: self.iniciarSesionWS)
             }
         }
     }
@@ -97,12 +103,21 @@ class LoginVC: UIViewController {
     func iniciarSesionWS()
     {
         guard let usuarioStr = self.usuarioTxt.text,!usuarioStr.isEmpty,let contrasena = self.contrasenaTxt.text,!contrasena.isEmpty else {
-            self.mostrarAlerta(msj: "Ingresa tu usuario y contraseña por favor.")
+            
+            let alertController = UIAlertController(title: "Kontenedores", message: "Ingresa tu usuario y contraseña porfavor.", preferredStyle: .alert)
+            
+            let ok = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
+                self.usuarioTxt.becomeFirstResponder()
+            })
+            
+            alertController.addAction(ok)
+            self.present(alertController, animated: true, completion: nil)
+            
+            self.view.isUserInteractionEnabled = true
+            self.activityIndicator.stopAnimating()
+            
             return
         }
-        
-        self.view.isUserInteractionEnabled = false
-        self.activityIndicator.startAnimating()
         
         var tokenFcm = Messaging.messaging().fcmToken ?? "No Token de FireBase"
         print("El Token de Messaging fcmToken es" , tokenFcm)
@@ -129,26 +144,30 @@ class LoginVC: UIViewController {
                     self.obtenerSaldoDisponible(token: usuario.token)
                 case "proveedor","vendedor":
                     self.guardarUsuarioLocalmente()
-                    
-                    self.view.isUserInteractionEnabled = true
                     self.activityIndicator.stopAnimating()
-                    
+                    self.view.isUserInteractionEnabled = true
                     self.performSegue(withIdentifier: "goToProveedor", sender: self)
                 case "escaner":
                     self.guardarUsuarioLocalmente()
-                    
-                    self.view.isUserInteractionEnabled = true
                     self.activityIndicator.stopAnimating()
-                    
+                    self.view.isUserInteractionEnabled = true
                     self.performSegue(withIdentifier: "goToScanEntrada", sender: self)
                 default:
                     break
                 }
             }else
             {
-                self.view.isUserInteractionEnabled = true
-                self.mostrarAlerta(msj: "Usuario o contraseña inválidos.")
+                let alertController = UIAlertController(title: "Kontenedores", message: "Usuario o contraseña inválidos.", preferredStyle: .alert)
+                
+                let ok = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
+                    self.contrasenaTxt.becomeFirstResponder()
+                })
+                
+                alertController.addAction(ok)
+                self.present(alertController, animated: true, completion: nil)
+                
                 self.activityIndicator.stopAnimating()
+                self.view.isUserInteractionEnabled = true
             }
         }
     }
@@ -166,32 +185,21 @@ class LoginVC: UIViewController {
                 
                 self.guardarUsuarioLocalmente()
                 
-                self.view.isUserInteractionEnabled = true
-                self.activityIndicator.stopAnimating()
-                
-                self.performSegue(withIdentifier: "goToObras", sender: self)
-            }else
-            {
-                let msj = respuesta as? String ?? "Lo sentimos,tu token de usuario ha expirado.Inicia sesión de nuevo."
-                
-                let alertController = UIAlertController(title: "Kontenedores", message: msj , preferredStyle: .alert)
-                
-                let ok = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
-                    //self.view.isUserInteractionEnabled = true
-                })
-                
-                self.view.isUserInteractionEnabled = true
-                self.activityIndicator.stopAnimating()
-                
-                alertController.addAction(ok)
-                
-                //self.present(alertController, animated: true, completion: nil)
+                if self.ocultarBtn == false
+                {
+                    self.navigationController?.popViewController(animated: true)
+                }else
+                {
+                    self.performSegue(withIdentifier: "goToObras", sender: self)
+                }
             }
+            
+            self.view.isUserInteractionEnabled = true
+            self.activityIndicator.stopAnimating()
         }
     }
-    
 
-    
+    //MARK: Guardar el usuario localmente
     func guardarUsuarioLocalmente()
     {
         guard let usuarioGuardar = AppDelegate.instanciaCompartida.usuario else {return}
@@ -205,6 +213,12 @@ class LoginVC: UIViewController {
         }
         
     }
+    
+    @IBAction func volverAtras(_ sender: UIButton)
+    {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     
     @IBAction func olvideMiContraseña(_ sender: UIButton) {
         
@@ -222,6 +236,7 @@ class LoginVC: UIViewController {
     @IBAction func volverLogin(segue:UIStoryboardSegue)
     {
         self.view.isUserInteractionEnabled = true
+        self.btnRegresar.isHidden = true
         
         self.usuarioTxt.text = ""
         self.usuarioTxt.becomeFirstResponder()
@@ -236,24 +251,25 @@ extension LoginVC : UITextFieldDelegate
 {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        return (textField == usuarioTxt) ? contrasenaTxt.becomeFirstResponder() : textField.resignFirstResponder()
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-//        if textField == contrasenaTxt
-//        {
-//            self.centerYConstraintStackUser.constant = 0
-//        }
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == contrasenaTxt
         {
             print("Termine de Editar")
             self.iniciarSesion()
         }
         
-        //self.centerYConstraintStackUser.constant = 40
+        return (textField == usuarioTxt) ? contrasenaTxt.becomeFirstResponder() : textField.resignFirstResponder()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == contrasenaTxt
+        {
+            let alturaPantalla = UIScreen.main.bounds.height
+            self.centerYConstraintStackUser.constant = (alturaPantalla == 568) ? -60 : 0
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.centerYConstraintStackUser.constant = 0
     }
 }
 

@@ -25,8 +25,8 @@ class KontenedoreServices: NSObject
     
         Alamofire.request(urlRegistro, method: .post, parameters: parametros, encoding: URLEncoding.default, headers: [:]).responseJSON { (respuesta) in
             
-            print("Resultado",respuesta.result)
-            print("Valor",respuesta.value)
+           // print("Resultado",respuesta.result)
+           // print("Valor",respuesta.value)
             
 //            if let data = respuesta.data {
 //                let json = String(data: data, encoding: String.Encoding.utf8)
@@ -49,10 +49,10 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlLogin, method: .post, parameters: parametros, encoding: URLEncoding.default, headers: [:]).responseJSON { (respuesta) in
             
-            print("TIMELINE",respuesta.timeline)
-            print("INITIAL RESPONSE TIME",respuesta.timeline.initialResponseTime)
-            print("REQUEST DURATION",respuesta.timeline.requestDuration)
-            print(respuesta.timeline.totalDuration)
+          //  print("TIMELINE",respuesta.timeline)
+           // print("INITIAL RESPONSE TIME",respuesta.timeline.initialResponseTime)
+           // print("REQUEST DURATION",respuesta.timeline.requestDuration)
+           // print(respuesta.timeline.totalDuration)
             
 //            if let data = respuesta.data {
 //                let json = String(data: data, encoding: String.Encoding.utf8)
@@ -102,8 +102,8 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlSaldoDisponible, method: .get, parameters: nil, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
         
-            print("Resultado",respuesta.result)
-            print("Valor",respuesta.value)
+           // print("Resultado",respuesta.result)
+            //print("Valor",respuesta.value)
             
 //            if let data = respuesta.data {
 //                let json = String(data: data, encoding: String.Encoding.utf8)
@@ -147,8 +147,8 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlSaldoDisponible, method: .post, parameters: parametros, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
             
-            print("Resultado",respuesta.result)
-            print("Valor",respuesta.value)
+            //print("Resultado",respuesta.result)
+            //print("Valor",respuesta.value)
             
             if let data = respuesta.data {
                 let json = String(data: data, encoding: String.Encoding.utf8)
@@ -219,8 +219,13 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlComprar, method: .post, parameters: parametros, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
             
-            print("Resultado",respuesta.result)
-            print("Valor",respuesta.value)
+           // print("Resultado",respuesta.result)
+           // print("Valor",respuesta.value)
+            
+//            if let data = respuesta.data {
+//                let json = String(data: data, encoding: String.Encoding.utf8)
+//                print("Comprar Entrada :  \(json)")
+//            }
             
             let valor = respuesta.value as? [String:Any]
             
@@ -229,16 +234,17 @@ class KontenedoreServices: NSObject
                 if let valorDict = valor
                 {
                     guard let data = valorDict["data"] as? [String:Any] else {
-                    
                         let msj = valorDict["message"] as? String
-                        
                         bloqueCompletacion(msj)
                         return
                     }
                     
                     let saldo = data["saldo_disponible"] as? Double
-               
                     bloqueCompletacion(saldo)
+                }else
+                {
+                    let msj = valor?["message"] as? String
+                    bloqueCompletacion(msj)
                 }
                 
             }else
@@ -259,8 +265,8 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlEntradas, method: .get, parameters: nil, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
             
-            print("Resultado",respuesta.result)
-            print("Valor",respuesta.value)
+           // print("Resultado",respuesta.result)
+            //print("Valor",respuesta.value)
             
             let valor = respuesta.value as? [String:Any]
             
@@ -298,8 +304,8 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlProductos, method: .get, parameters: nil, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
             
-            print("Resultado",respuesta.result)
-            print("Valor",respuesta.value)
+            //print("Resultado",respuesta.result)
+           // print("Valor",respuesta.value)
             
             let valor = respuesta.value as? [String:Any]
             
@@ -375,7 +381,6 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlProductosProveedor, method: .get, parameters: nil, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
             
-            
             let valor = respuesta.value as? [String:Any]
             
             if respuesta.result.isSuccess
@@ -412,13 +417,13 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlProductosProveedor, method: .get, parameters: nil, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
             
-            print(respuesta.result)
-            print(respuesta.value)
+           // print(respuesta.result)
+            //print(respuesta.value)
             
-            if let data = respuesta.data {
-                let json = String(data: data, encoding: String.Encoding.utf8)
-                print("Data Response de Actualizar Pedido: \(json)")
-            }
+//            if let data = respuesta.data {
+//                let json = String(data: data, encoding: String.Encoding.utf8)
+//                print("Data Response de Actualizar Pedido: \(json)")
+//            }
             
             let valor = respuesta.value as? [String:Any]
             
@@ -456,13 +461,13 @@ class KontenedoreServices: NSObject
     
         Alamofire.request(urlProductosProveedor, method: .get, parameters: nil, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
             
-            print(respuesta.result)
-            print(respuesta.value)
+           // print(respuesta.result)
+           // print(respuesta.value)
             
-            if let data = respuesta.data {
-                let json = String(data: data, encoding: String.Encoding.utf8)
-                print("Data Response de Actualizar Pedido: \(json)")
-            }
+//            if let data = respuesta.data {
+//                let json = String(data: data, encoding: String.Encoding.utf8)
+//                print("Data Response de Actualizar Pedido: \(json)")
+//            }
         
             let valor = respuesta.value as? [String:Any]
             
@@ -501,8 +506,8 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlVentasDia, method: .get, parameters: nil, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
             
-            print(respuesta.result)
-            print(respuesta.value)
+           // print(respuesta.result)
+           // print(respuesta.value)
             
             let valor = respuesta.value as? [String:Any]
             
@@ -545,13 +550,13 @@ class KontenedoreServices: NSObject
     
         Alamofire.request(urlPedido, method: .post, parameters: parametros, encoding: JSONEncoding.default, headers: cabecera).responseJSON { (respuesta) in
 
-//            if let data = respuesta.data {
-//                let json = String(data: data, encoding: String.Encoding.utf8)
-//                print("Failure Response: \(json)")
-//            }
-
-            print(respuesta.result)
-            print(respuesta.value)
+            //print(respuesta.result)
+            //print(respuesta.value)
+            
+            if let data = respuesta.data {
+                let json = String(data: data, encoding: String.Encoding.utf8)
+                print("Mandar Pedido :  \(json)")
+            }
 
             let valor = respuesta.value as? [String:Any]
 
@@ -590,8 +595,8 @@ class KontenedoreServices: NSObject
             print("CONSULTAMOS EL ESTADO DEL PEDIDO")
             print("//----------------------------------//")
             
-            print(respuesta.result)
-            print(respuesta.value)
+            //print(respuesta.result)
+           // print(respuesta.value)
             
 //            if let data = respuesta.data {
 //                let json = String(data: data, encoding: String.Encoding.utf8)
@@ -634,10 +639,10 @@ class KontenedoreServices: NSObject
             print(respuesta.result)
             print(respuesta.value)
             
-//            if let data = respuesta.data {
-//                let json = String(data: data, encoding: String.Encoding.utf8)
-//                print("Data Response de Actualizar Pedido: \(json)")
-//            }
+            if let data = respuesta.data {
+                let json = String(data: data, encoding: String.Encoding.utf8)
+                print("Data Response de Actualizar Pedido: \(json)")
+            }
             
             print("Exito? :", respuesta.result.isSuccess)
             let valor = respuesta.value as? [String:Any]
@@ -677,7 +682,7 @@ class KontenedoreServices: NSObject
         
         Alamofire.request(urlPedido, method: .get, parameters: nil, encoding: URLEncoding.default, headers: cabecera).responseJSON { (respuesta) in
             
-            print(respuesta.value)
+            //print(respuesta.value)
             
             let valor = respuesta.value as? [String:Any]
             
@@ -746,25 +751,10 @@ class KontenedoreServices: NSObject
             
             let valor = respuesta.value as? [String:Any]
         
-//            print("Respuesta Data",respuesta.data)
-//            print("Respuesta Value",valor)
+            //print("Respuesta Data",respuesta.data)
+            //print("Respuesta Value",valor)
             
-            if respuesta.result.isSuccess
-            {
-                guard let _ = valor?["data"] else {
-                    print("Respuesta Exitosa pero sin Data")
-                    bloqueCompletacion(valor?["message"] as? String)
-                    return
-                }
-                
-                print("Entrada Actualizada")
-                bloqueCompletacion(respuesta.result.isSuccess)
-                
-            }else
-            {
-                print("Hubo en Error ,Failure")
-                bloqueCompletacion(valor?["message"] as? String)
-            }
+            bloqueCompletacion(valor?["message"] as? String)
         }
     }
     

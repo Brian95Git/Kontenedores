@@ -35,6 +35,13 @@ class CategoriasVC: BaseViewController,UITableViewDataSource,UITableViewDelegate
         self.tablaCategorias.refreshControl = refreshControl
         
         self.obtenerCategorias()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(usuarioDeslogueado), name: NSNotification.Name(rawValue: "UsuarioDeslogueado"), object: nil)
+    }
+    
+    @objc func usuarioDeslogueado()
+    {
+        self.tablaCategorias.isUserInteractionEnabled = false
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle
@@ -116,21 +123,31 @@ class CategoriasVC: BaseViewController,UITableViewDataSource,UITableViewDelegate
     
     @objc func obtenerCategorias()
     {
-        //if !self.comprobarInternet() {return}
-        
-        if let refrescando = self.tablaCategorias.refreshControl,!refrescando.isRefreshing
-        {
-            CategoriasVC.categorias.removeAll()
-        }
-        
         self.tablaCategorias.refreshControl?.beginRefreshing()
         
+        self.comprobarInternet { (disponible, msj) in
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.tablaCategorias.refreshControl?.endRefreshing()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.obtenerCategoriasWS()
+                }
+            }
+        }
+    }
+
+    func obtenerCategoriasWS()
+    {
         let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
         
         KontenedoreServices.instancia.obtenerCategorias(tokenUsuario: tokenUsuario!) { (respuesta) in
             
             if let dataCategoria = respuesta as? Categorias
             {
+                CategoriasVC.categorias.removeAll()
                 CategoriasVC.categorias = dataCategoria.categoria
                 self.tablaCategorias.refreshControl?.endRefreshing()
                 self.tablaCategorias.reloadData()
@@ -140,7 +157,6 @@ class CategoriasVC: BaseViewController,UITableViewDataSource,UITableViewDelegate
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         tablaCategorias.isUserInteractionEnabled = true
     }
     

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fOs-9K-zWV">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Splash KontenedoresVC-->
+        <scene sceneID="0S9-y5-k2Q">
+            <objects>
+                <viewController id="fQC-iT-4kP" customClass="SplashKontenedoresVC" customModule="Kontenedores" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="R83-nl-Nd9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fondo_K" translatesAutoresizingMaskIntoConstraints="NO" id="9UN-cm-W1g">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.67450980390000004" green="0.0" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lKw-OT-Wuz" userLabel="logoKontenedores">
+                                <rect key="frame" x="37.5" y="183.5" width="300" height="300"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="logoKontenedores">
+                                    <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="J5L-DO-0cp">
+                                <rect key="frame" x="169" y="483.5" width="37" height="37"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="lKw-OT-Wuz" firstAttribute="width" secondItem="lKw-OT-Wuz" secondAttribute="height" multiplier="1:1" id="99I-JN-66b"/>
+                            <constraint firstItem="9UN-cm-W1g" firstAttribute="top" secondItem="R83-nl-Nd9" secondAttribute="top" id="Cu2-K3-vDq"/>
+                            <constraint firstItem="LaX-qN-aE4" firstAttribute="bottom" secondItem="9UN-cm-W1g" secondAttribute="bottom" id="F8b-7I-9X7"/>
+                            <constraint firstItem="lKw-OT-Wuz" firstAttribute="centerY" secondItem="R83-nl-Nd9" secondAttribute="centerY" id="HlA-f7-ouj"/>
+                            <constraint firstItem="lKw-OT-Wuz" firstAttribute="width" secondItem="R83-nl-Nd9" secondAttribute="width" multiplier="0.8" id="Kq9-WM-u1p"/>
+                            <constraint firstItem="J5L-DO-0cp" firstAttribute="centerX" secondItem="R83-nl-Nd9" secondAttribute="centerX" id="SEo-o4-8Y2"/>
+                            <constraint firstItem="J5L-DO-0cp" firstAttribute="top" secondItem="lKw-OT-Wuz" secondAttribute="bottom" id="aEo-4d-jP3"/>
+                            <constraint firstItem="LaX-qN-aE4" firstAttribute="trailing" secondItem="9UN-cm-W1g" secondAttribute="trailing" id="anQ-tb-VtG"/>
+                            <constraint firstItem="lKw-OT-Wuz" firstAttribute="centerX" secondItem="R83-nl-Nd9" secondAttribute="centerX" id="dp9-dY-V9s"/>
+                            <constraint firstItem="9UN-cm-W1g" firstAttribute="leading" secondItem="R83-nl-Nd9" secondAttribute="leading" id="muC-1n-rwD"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="LaX-qN-aE4"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="abi-r4-ilg"/>
+                    <connections>
+                        <segue destination="6it-tB-4QD" kind="showDetail" identifier="goToLogin" id="3rJ-fD-G9i"/>
+                        <segue destination="KLX-aH-0CC" kind="show" identifier="goToObras" id="ahp-fC-km7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KiW-x8-rtM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="951.20000000000005" y="80.50974512743629"/>
+        </scene>
+        <!--Login-->
+        <scene sceneID="cyd-le-ozi">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Login" id="6it-tB-4QD" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8lp-zK-kAZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1690" y="-79"/>
+        </scene>
+        <!--Obras-->
+        <scene sceneID="glQ-Cb-FIE">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Obras" id="KLX-aH-0CC" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ODy-4F-9x5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1689" y="202"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="UKB-3l-2xD">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="fOs-9K-zWV" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="PVj-02-TV6">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="fQC-iT-4kP" kind="relationship" relationship="rootViewController" id="po6-PS-sbf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wkL-nd-RiO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="12" y="80.50974512743629"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="fondo_K" width="750" height="1334"/>
+        <image name="logoKontenedores" width="500" height="500"/>
+    </resources>
+</document>

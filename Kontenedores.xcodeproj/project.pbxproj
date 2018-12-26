@@ -38,6 +38,9 @@
 		846DE64721BF4B3C003F1529 /* TicketVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DE64621BF4B3C003F1529 /* TicketVC.swift */; };
 		8485EC0021BB14E7006CEC74 /* Entrada.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8485EBFF21BB14E7006CEC74 /* Entrada.swift */; };
 		8485EC0221BB3E61006CEC74 /* Producto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8485EC0121BB3E61006CEC74 /* Producto.swift */; };
+		84AD17FF21CC5F1600726460 /* SplashKontenedoresVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17FE21CC5F1600726460 /* SplashKontenedoresVC.swift */; };
+		84AD180321CC652F00726460 /* Splash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84AD180221CC652F00726460 /* Splash.storyboard */; };
+		84B82AEC21CB33A40040AAC2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84B82AEB21CB33A40040AAC2 /* GoogleService-Info.plist */; };
 		84C6362A21ADF75500A6D714 /* PagarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C6362921ADF75500A6D714 /* PagarVC.swift */; };
 		84CB14CE21AF1B7800A7BF1E /* KontenedoreServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB14CD21AF1B7800A7BF1E /* KontenedoreServices.swift */; };
 		84CB14DB21AF403500A7BF1E /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB14DA21AF403500A7BF1E /* Reachability.swift */; };
@@ -51,7 +54,6 @@
 		84D5BAE421C873F600236B34 /* CategoriasVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5BADF21C873F600236B34 /* CategoriasVC.swift */; };
 		84D5BAE521C873F600236B34 /* ProductoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5BAE021C873F600236B34 /* ProductoVC.swift */; };
 		84D7E09521C1E3C100F7A81E /* ListaPedidosVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D7E09421C1E3C100F7A81E /* ListaPedidosVC.swift */; };
-		84EF974A21BF19AF0088AC05 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84EF974921BF19AC0088AC05 /* GoogleService-Info.plist */; };
 		84EF974E21BF45440088AC05 /* EntradaScan.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84EF974D21BF45440088AC05 /* EntradaScan.storyboard */; };
 		84EF975121BF46420088AC05 /* EntradaScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EF975021BF46420088AC05 /* EntradaScanVC.swift */; };
 		84F7127421C00ABC000270ED /* ObraCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F7127321C00ABC000270ED /* ObraCVCell.swift */; };
@@ -132,6 +134,9 @@
 		846DE64621BF4B3C003F1529 /* TicketVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketVC.swift; sourceTree = "<group>"; };
 		8485EBFF21BB14E7006CEC74 /* Entrada.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entrada.swift; sourceTree = "<group>"; };
 		8485EC0121BB3E61006CEC74 /* Producto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Producto.swift; sourceTree = "<group>"; };
+		84AD17FE21CC5F1600726460 /* SplashKontenedoresVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashKontenedoresVC.swift; sourceTree = "<group>"; };
+		84AD180221CC652F00726460 /* Splash.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Splash.storyboard; sourceTree = "<group>"; };
+		84B82AEB21CB33A40040AAC2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84C6362921ADF75500A6D714 /* PagarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagarVC.swift; sourceTree = "<group>"; };
 		84CB14CD21AF1B7800A7BF1E /* KontenedoreServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KontenedoreServices.swift; sourceTree = "<group>"; };
 		84CB14CF21AF2E5F00A7BF1E /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,7 +151,6 @@
 		84D5BADF21C873F600236B34 /* CategoriasVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriasVC.swift; sourceTree = "<group>"; };
 		84D5BAE021C873F600236B34 /* ProductoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductoVC.swift; sourceTree = "<group>"; };
 		84D7E09421C1E3C100F7A81E /* ListaPedidosVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaPedidosVC.swift; sourceTree = "<group>"; };
-		84EF974921BF19AC0088AC05 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84EF974B21BF21280088AC05 /* Kontenedores.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Kontenedores.entitlements; sourceTree = "<group>"; };
 		84EF974D21BF45440088AC05 /* EntradaScan.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EntradaScan.storyboard; sourceTree = "<group>"; };
 		84EF975021BF46420088AC05 /* EntradaScanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntradaScanVC.swift; sourceTree = "<group>"; };
@@ -210,9 +214,9 @@
 				8417BDA221A30DB800F33866 /* MVC */,
 				8417BDA621A3100C00F33866 /* Extras */,
 				8417BD9721A3081400F33866 /* Assets.xcassets */,
-				8417BD9921A3081400F33866 /* LaunchScreen.storyboard */,
-				84EF974921BF19AC0088AC05 /* GoogleService-Info.plist */,
 				8417BD9C21A3081400F33866 /* Info.plist */,
+				8417BD9921A3081400F33866 /* LaunchScreen.storyboard */,
+				84B82AEB21CB33A40040AAC2 /* GoogleService-Info.plist */,
 			);
 			path = Kontenedores;
 			sourceTree = "<group>";
@@ -230,6 +234,7 @@
 		8417BDA321A30DC200F33866 /* Vistas */ = {
 			isa = PBXGroup;
 			children = (
+				84AD180121CC64CB00726460 /* Splash */,
 				84EF974C21BF44C30088AC05 /* ObraScan */,
 				8417BDA421A30DC700F33866 /* Usuario */,
 				8417BDA521A30DCF00F33866 /* Proveedor */,
@@ -269,6 +274,7 @@
 		8417BDAB21A311C900F33866 /* Controladores */ = {
 			isa = PBXGroup;
 			children = (
+				84AD17FD21CC5ED700726460 /* Splash */,
 				84EF974F21BF46020088AC05 /* ObraScan */,
 				8417BDAC21A3124F00F33866 /* Usuario */,
 				84462A6121A47FB1002D55C8 /* Proveedor */,
@@ -457,6 +463,22 @@
 			path = MenuSlide;
 			sourceTree = "<group>";
 		};
+		84AD17FD21CC5ED700726460 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				84AD17FE21CC5F1600726460 /* SplashKontenedoresVC.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		84AD180121CC64CB00726460 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				84AD180221CC652F00726460 /* Splash.storyboard */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
 		84CB14CC21AF1B1700A7BF1E /* ServiciosWeb */ = {
 			isa = PBXGroup;
 			children = (
@@ -565,13 +587,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8404E1DB21C552EF00BF1F77 /* AvenirLTStd-Heavy.otf in Resources */,
+				84B82AEC21CB33A40040AAC2 /* GoogleService-Info.plist in Resources */,
 				84462A6021A467EA002D55C8 /* Proveedor.storyboard in Resources */,
 				8417BD9B21A3081400F33866 /* LaunchScreen.storyboard in Resources */,
 				8417BD9821A3081400F33866 /* Assets.xcassets in Resources */,
+				84AD180321CC652F00726460 /* Splash.storyboard in Resources */,
 				84EF974E21BF45440088AC05 /* EntradaScan.storyboard in Resources */,
 				8417BE0621A31A7C00F33866 /* Obras.storyboard in Resources */,
 				8417BE0521A31A7C00F33866 /* Login.storyboard in Resources */,
-				84EF974A21BF19AF0088AC05 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -633,6 +656,7 @@
 			files = (
 				8417BE0121A31A6700F33866 /* RegistroVC.swift in Sources */,
 				84D5BAE521C873F600236B34 /* ProductoVC.swift in Sources */,
+				84AD17FF21CC5F1600726460 /* SplashKontenedoresVC.swift in Sources */,
 				8435A87921A7668800E19D0A /* CategoriaProducto.swift in Sources */,
 				845CCDB821BC53F40066AE27 /* Recarga.swift in Sources */,
 				84D7E09521C1E3C100F7A81E /* ListaPedidosVC.swift in Sources */,

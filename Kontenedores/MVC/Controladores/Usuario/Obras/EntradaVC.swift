@@ -62,38 +62,50 @@ class EntradaVC: UIViewController {
     
     @IBAction func comprarEntrada(_ sender: UIButton)
     {
-        //if !self.comprobarInternet() {return}
-        
-        sender.titleEdgeInsets.right = 20
+        self.adquirirEntrada(btn: sender)
+    }
+    
+    func adquirirEntrada(btn:UIButton)
+    {
+        btn.titleEdgeInsets.right = 20
+        btn.isUserInteractionEnabled = false
         self.activityComprar.startAnimating()
         
-        sender.isUserInteractionEnabled = false
-        
+        self.comprobarInternet { (disponible, msj) in
+            
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    btn.titleEdgeInsets.right = 0
+                    btn.isUserInteractionEnabled = true
+                    self.activityComprar.stopAnimating()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.comprarEntradaWS(btn: btn)
+                }
+            }
+        }
+    }
+    
+    func comprarEntradaWS(btn:UIButton)
+    {
         let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
         
         KontenedoreServices.instancia.comprarEntrada(tokenUsuario: tokenUsuario!, presentacionId: miEntrada.id, nroEntradas: miEntrada.nroEntradas) { (respuesta) in
             
             if let saldo = respuesta as? Double
             {
-                print(saldo)
                 AppDelegate.instanciaCompartida.usuario?.saldo = saldo
                 self.performSegue(withIdentifier: "goToCompraEntrada", sender: self.miEntrada)
             }else
             {
                 let msj = respuesta as? String ?? "Lo sentimos,ocurrió un error al querer comprar tu entrada."
-                let alertController = UIAlertController(title: "Kontenedores", message:msj , preferredStyle: .alert)
-                
-                let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (action) in
-                    
-                    sender.titleEdgeInsets.right = 0
-                    sender.isUserInteractionEnabled = true
-                })
-                
-                alertController.addAction(okAction)
-                
-                self.present(alertController, animated: true, completion: nil)
+                self.mostrarAlerta(msj: msj)
             }
             
+            btn.titleEdgeInsets.right = 0
+            btn.isUserInteractionEnabled = true
             self.activityComprar.stopAnimating()
         }
     }

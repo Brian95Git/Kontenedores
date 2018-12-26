@@ -59,41 +59,44 @@ class HistorialVC: BaseViewController,UITableViewDataSource,UITableViewDelegate 
 
     @objc func obtenerProductos()
     {
-        //if !self.comprobarInternet() {return}
-        
-        if let refrescando = self.historialTV.refreshControl,!refrescando.isRefreshing
-        {
-            misCompras.removeAll()
-        }
-       
         self.historialTV.refreshControl?.beginRefreshing()
         
+        self.comprobarInternet { (disponible, msj) in
+            
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.historialTV.refreshControl?.endRefreshing()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.obtenerProductosWS()
+                }
+            }
+        }
+    }
+    
+    func obtenerProductosWS()
+    {
         let tokenUsuario = (AppDelegate.instanciaCompartida.usuario?.token)!
         
         KontenedoreServices.instancia.obtenerProductos(tokenUsuario: tokenUsuario) { (respuesta) in
             if let compras = respuesta as? [Compra]
             {
+                self.misCompras.removeAll()
                 self.misCompras = compras
                 
-//                self.misCompras.sort(by: { (com1, com2) -> Bool in
-//                    return com1.id > com2.id
-//                })
+                self.misCompras.sort(by: { (com1, com2) -> Bool in
+                    return com1.id > com2.id
+                })
                 
                 self.historialTV.refreshControl?.endRefreshing()
                 self.historialTV.reloadData()
                 self.activityIndicator.stopAnimating()
             }else
             {
-                let msj = respuesta as? String ?? "Lo sentimos,ocurrió un error al querer traer tu historial."
-                
-                let alertController = UIAlertController(title: "Kontenedores", message: msj, preferredStyle: .alert)
-                
-                let okAction = UIAlertAction(title: "Aceptar", style: .default) { (action) in
-                }
-                
-                alertController.addAction(okAction)
-                
-                self.present(alertController, animated: true, completion: nil)
+                let msj = "Lo sentimos,ocurrió un error al querer traer tu historial."
+                self.mostrarAlerta(msj: msj)
             }
         }
         //

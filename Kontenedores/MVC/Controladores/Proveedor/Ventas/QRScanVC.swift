@@ -109,23 +109,8 @@ class QRScanVC: UIViewController,AVCaptureMetadataOutputObjectsDelegate {
                     {
                         self.idCliente = Int(object.stringValue!)!
                         print("IdClient :", idCliente!)
-                        
-                        let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
                         //print(tokenUsuario!)
-                        
-                        KontenedoreServices.instancia.mandarPedido(tokenUsuario: tokenUsuario!, idCliente: self.idCliente!, monto: CategoriasVC.precioActual.valorNumerico2Decimales(), pedidos: self.listaPedidos) { (respuesta) in
-                        
-                            if let idCompra = respuesta as? Int
-                            {
-                                print("Id de la Compra" , idCompra)
-                                self.llamarVistaConfirmacion()
-                                self.consultarEstadoPedido(tokenUsuario: tokenUsuario!, idCompra: idCompra,estado: "pendiente")
-                            }else
-                            {
-                                self.estadoConfirmacion = "sinsaldo"
-                                self.llamarVistaConfirmacion()
-                            }
-                        }
+                        self.mandarPedido()
                     }
                 }
             }
@@ -197,7 +182,6 @@ class QRScanVC: UIViewController,AVCaptureMetadataOutputObjectsDelegate {
             }) { (bool) in
             }
             
-            
             self.confirmacionLabel.text = (confirmacion) ? "El comprador aceptó la venta." : "El comprador rechazó la venta."
             
             self.btnContinuar.isHidden = false
@@ -207,19 +191,64 @@ class QRScanVC: UIViewController,AVCaptureMetadataOutputObjectsDelegate {
             return
         }
         
-        KontenedoreServices.instancia.estadoPedido(tokenUsuario: tokenUsuario, idCompra: idCompra) { (respuesta) in
+        self.comprobarInternet { (disponible, msj) in
             
-            if let estatusActual = respuesta as? String
-            {
-                Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { (timer) in
-                    
-                    self.consultarEstadoPedido(tokenUsuario: tokenUsuario, idCompra: idCompra, estado: estatusActual)
-                })
-                
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    KontenedoreServices.instancia.estadoPedido(tokenUsuario: tokenUsuario, idCompra: idCompra) { (respuesta) in
+                        
+                        if let estatusActual = respuesta as? String
+                        {
+                            Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { (timer) in
+                                
+                                self.consultarEstadoPedido(tokenUsuario: tokenUsuario, idCompra: idCompra, estado: estatusActual)
+                            })
+                        }
+                    }
+                }
             }
         }
     }
 
+    func mandarPedido()
+    {
+        self.comprobarInternet { (disponible, msj) in
+            
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.mandarPedidoWS()
+                }
+            }
+        }
+    }
+    
+    func mandarPedidoWS()
+    {
+        let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
+        
+        KontenedoreServices.instancia.mandarPedido(tokenUsuario: tokenUsuario!, idCliente: self.idCliente!, monto: CategoriasVC.precioActual.valorNumerico2Decimales(), pedidos: self.listaPedidos) { (respuesta) in
+            
+            if let idCompra = respuesta as? Int
+            {
+                print("Id de la Compra" , idCompra)
+                self.llamarVistaConfirmacion()
+                self.consultarEstadoPedido(tokenUsuario: tokenUsuario!, idCompra: idCompra,estado: "pendiente")
+            }else
+            {
+                self.estadoConfirmacion = "sinsaldo"
+                self.llamarVistaConfirmacion()
+            }
+        }
+    }
+    
     /*
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation

@@ -12,27 +12,54 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
 {
     @IBOutlet weak var obrasCV: UICollectionView!
     @IBOutlet weak var btnSaldo: UIButton!
-    @IBOutlet weak var btnAtras: UIButton!
+    @IBOutlet weak var btnLogin: UIButton!
     @IBOutlet weak var saldoLabel: UILabel!
+    @IBOutlet weak var btnMenu: UIButton!
+    
     @IBOutlet weak var activityObras: UIActivityIndicatorView!
     
-    let obrasImg :[UIImage]? = [#imageLiteral(resourceName: "obra1"),#imageLiteral(resourceName: "obra2"),#imageLiteral(resourceName: "obra3"),#imageLiteral(resourceName: "obra4")]
-    
     var obras : [Obra] = []
+    //var indiceObraActual = 1
     
-    var indiceObraActual = 1
-    
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         self.addSlideMenuButton()
         
         obrasCV.dataSource = self
         obrasCV.delegate = self
+    
+        self.consultarSaldo()
         
-        self.obtenerObras()
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(actualizarDataUsuario), name: NSNotification.Name(rawValue: "UsuarioDeslogueado"), object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    
+        print("will Appear Obras")
+        if obras.isEmpty {self.obtenerObras()}
+        self.actualizarDataUsuario()
+    }
+    
+    @objc func actualizarDataUsuario()
+    {
+        self.pintarSaldoUsuario()
+        btnMenu.isHidden = (AppDelegate.instanciaCompartida.usuario == nil)
+        btnLogin.isHidden = !btnMenu.isHidden
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle
+    {
+        return .lightContent
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    func consultarSaldo()
+    {
         if let miSaldo = AppDelegate.instanciaCompartida.usuario,miSaldo.saldo <= 0,AppDelegate.irRecargarSaldo
         {
             let alertController = UIAlertController(title: "Kontenedores", message: "No tienes saldo.Por favor,recárgalo en la pantalla Recargar Saldo.", preferredStyle: .alert)
@@ -53,31 +80,6 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.pintarSaldoUsuario()
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle
-    {
-        return .lightContent
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if !AppDelegate.permitirNotificaciones
-        {
-            let alertController = UIAlertController(title: "Kontenedores", message: "No podrás realizar compras de productos o servicios si niegas el envio de notificaciones.Por favor,permitelas en la configuración del dispositivo.", preferredStyle: .alert)
-
-            let ok = UIAlertAction(title: "Ok", style: .default, handler: nil)
-
-            alertController.addAction(ok)
-
-            self.present(alertController, animated: true, completion: nil)
-        }
-    }
-    
     //MARK: Pintar Saldo
     
     func pintarSaldoUsuario()
@@ -87,6 +89,7 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
             self.saldoLabel.text = "S/. \(usuario.saldo.valorNumerico2DecimalesStr())"
         }else
         {
+            //AppDelegate.instanciaCompartida.usuario = nil
             self.saldoLabel.text = "S/ 0.00"
         }
     }
@@ -95,21 +98,42 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
     
     func obtenerObras()
     {
-        //if !self.comprobarInternet() {return}
-        
-        self.obras.removeAll()
+        self.comprobarInternet { (disponible, msj) in
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.activityObras.stopAnimating()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.obtenerObrasWS()
+                }
+            }
+        }
+    }
+    
+    func obtenerObrasWS()
+    {
         self.activityObras.startAnimating()
         
         KontenedoreServices.instancia.obtenerObras(todasLasObras: false) { (respuesta) in
             
             if let obras = respuesta as? [Obra]
             {
+                self.obras.removeAll()
                 self.obras = obras
                 self.obrasCV.reloadData()
                 self.activityObras.stopAnimating()
             }
         }
     }
+    
+    
+    @IBAction func irAlLogin(_ sender: UIButton)
+    {
+        self.performSegue(withIdentifier: "goToLogin", sender: self)
+    }
+    
     
     // MARK: CollectionView Metodos
     
@@ -194,7 +218,7 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
     
     @IBAction func volverObras(segue: UIStoryboardSegue)
     {
-        
+        self.obrasCV.isUserInteractionEnabled = true
     }
     
     
@@ -213,19 +237,12 @@ class ObrasVC: BaseViewController,UICollectionViewDataSource,UICollectionViewDel
             
             detalleObra.obra = self.obras[indiceObra.row]
             detalleObra.imgObraSelect = celda.portadaObra.image!
-            
-//            if  indiceObra.row < obrasImg?.count ?? 0
-//            {
-//                detalleObra.imgObraSelect  = (obrasImg?[indiceObra.row])!
-//            }else
-//            {
-//                detalleObra.imgObraSelect  = #imageLiteral(resourceName: "portadaObraPlaceHolder")
-//            }
         }
         
-        if segue.identifier == "volverRecargarSaldo"
+        if segue.identifier == "goToLogin"
         {
-            
+            let loginVC = segue.destination as! LoginVC
+            loginVC.ocultarBtn = false
         }
         
     }

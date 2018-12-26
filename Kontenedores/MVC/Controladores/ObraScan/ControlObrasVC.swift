@@ -42,20 +42,32 @@ class ControlObrasVC: BaseViewController,UITableViewDataSource,UITableViewDelega
     
     @objc func obtenerTodasLasObras()
     {
-        //if !self.comprobarInternet() {return}
-        
-        if let refrescando = self.controlObrasTV.refreshControl,!refrescando.isRefreshing
-        {
-            self.obras.removeAll()
-            self.presentaciones.removeAll()
-        }
-        
         self.controlObrasTV.refreshControl?.beginRefreshing()
         
+        self.comprobarInternet { (disponible, msj) in
+            
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.controlObrasTV.refreshControl?.endRefreshing()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.obtenerObrasWS()
+                }
+            }
+        }
+    }
+    
+    func obtenerObrasWS()
+    {
         KontenedoreServices.instancia.obtenerObras(todasLasObras: false) { (respuesta) in
             
             if let obras = respuesta as? [Obra]
             {
+                self.obras.removeAll()
+                self.presentaciones.removeAll()
+                
                 self.obras = obras
                 
                 self.controlObrasTV.refreshControl?.endRefreshing()

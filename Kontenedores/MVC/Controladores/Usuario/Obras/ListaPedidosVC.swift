@@ -34,22 +34,54 @@ class ListaPedidosVC: UIViewController {
     
     @IBAction func aceptarPedido(_ sender: UIButton)
     {
-        //self.comprobarInternet()
-        
-        sender.isUserInteractionEnabled = false
         self.activityAceptar.startAnimating()
+        sender.isUserInteractionEnabled = false
         
-        self.definirEstadoPedido(estatus: true, activity: self.activityAceptar)
+        self.aceptarCompra()
+    }
+    
+    func aceptarCompra()
+    {
+        self.comprobarInternet { (disponible, msj) in
+            
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.btnAceptar.isUserInteractionEnabled = true
+                    self.activityAceptar.stopAnimating()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.definirEstadoPedido(estatus: true, activity: self.activityAceptar)
+                }
+            }
+        }
     }
     
     @IBAction func cancelarPedido(_ sender: UIButton)
     {
-        //if !self.comprobarInternet() {return}
-        
-        sender.isUserInteractionEnabled = false
         self.activityCancelar.startAnimating()
+        sender.isUserInteractionEnabled = false
         
-        self.definirEstadoPedido(estatus: false, activity: self.activityCancelar)
+        self.cancelarCompra()
+    }
+    
+    func cancelarCompra()
+    {
+        self.comprobarInternet { (disponible, msj) in
+            
+            DispatchQueue.main.async {
+                if !disponible
+                {
+                    self.btnCancelar.isUserInteractionEnabled = true
+                    self.activityCancelar.stopAnimating()
+                    self.mostrarAlerta(msj: msj)
+                }else
+                {
+                    self.definirEstadoPedido(estatus: false, activity: self.activityCancelar)
+                }
+            }
+        }
     }
     
     func definirEstadoPedido(estatus:Bool,activity:UIActivityIndicatorView)
@@ -58,22 +90,27 @@ class ListaPedidosVC: UIViewController {
         
         AppDelegate.pushConfirmacionPedido = false
         
-        let tokenUsuario = AppDelegate.instanciaCompartida.usuario?.token
+        guard let usuario = AppDelegate.instanciaCompartida.usuario else {
+            return
+        }
         
-        KontenedoreServices.instancia.actualizarPedido(tokenUsuario: tokenUsuario!, idCompra: idCompra, estatus: estatus) { (respuesta) in
+        KontenedoreServices.instancia.actualizarPedido(tokenUsuario: usuario.token, idCompra: idCompra, estatus: estatus) { (respuesta) in
             
             if let exito = respuesta as? Double
             {
-                activity.stopAnimating()
-            
                 AppDelegate.instanciaCompartida.usuario?.saldo = exito.valorNumerico2Decimales()
                 
                 self.dismiss(animated: true, completion: nil)
             }else
             {
-                activity.stopAnimating()
+                //self.mostrarAlerta(msj: "Lo sentimos,ocurrió un error.Vuelva a intentarlo")
                 self.dismiss(animated: true, completion: nil)
             }
+            
+            self.btnAceptar.isUserInteractionEnabled = true
+            self.btnCancelar.isUserInteractionEnabled = true
+            
+            activity.stopAnimating()
         }
     }
     
